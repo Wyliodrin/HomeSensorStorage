@@ -28,7 +28,7 @@ function createGraphs()
 				if(rows.length==0)
 				{
 					connection.query("CREATE  TABLE "+graphsName+"(id INT NOT NULL AUTO_INCREMENT,"+
-						"name VARCHAR(45) NOT NULL,description VARCHAR(45) NULL,unit VARCHAR(45) NOT NULL,dashboard VARCHAR(150) NOT NULL,"+
+						"name VARCHAR(45) NOT NULL,description VARCHAR(45) NULL,unit VARCHAR(45) NOT NULL,dashboard INT NOT NULL,"+
 					"PRIMARY KEY (id),INDEX dashboard (dashboard ASC),CONSTRAINT dash"+
 					" FOREIGN KEY (dashboard) REFERENCES "+dashboardName+"(id)"+
 					" ON DELETE CASCADE\n ON UPDATE CASCADE);", function(err, rows){
@@ -59,7 +59,8 @@ function createSignals()
 			if(rows.length == 0)
 			{
 				var query = "CREATE  TABLE "+signalTable+" (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(45) NULL, "+
-				"dashboarduuid INT NOT NULL ,PRIMARY KEY (id), CONSTRAINT uc_name_dash UNIQUE (name, dashboarduuid) );";
+				"dashboarduuid VARCHAR(150) NOT NULL ,PRIMARY KEY (id), CONSTRAINT uc_name_dash UNIQUE (name, dashboarduuid),"+
+				"CONSTRAINT c FOREIGN KEY(dashboarduuid) REFERENCES "+dashboardName+"(uuid) ON UPDATE CASCADE ON DELETE CASCADE);";
 				connection.query(query,function(err,rows){
 					if(err)
 						console.log('cannot create table '+err);

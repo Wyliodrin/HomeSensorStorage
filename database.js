@@ -3,6 +3,7 @@
 var config = require('./config.js').data;
 var mysql = require('mysql');
 var uuid = require('node-uuid');
+var _ = require('underscore');
 
 var connection = mysql.createConnection({
   host     : config.host,
@@ -13,6 +14,9 @@ var connection = mysql.createConnection({
 
 var dashboardTable = config.prefix+"dashboard";
 var graphTable = config.prefix+"graph";
+var signalTable = config.prefix+'signal';
+var correspondenceTable = config.prefix+'correspondence';
+var signalTablePrefix = config.prefix+'signalvalue';
 
 connection.connect();
 
@@ -44,42 +48,83 @@ function addDashboard(name, description,callbackFunction)
 	}
 	var query = "insert into "+dashboardTable+" (name, description, uuid) values ("+mysql.escape(name)+
 				", "+mysql.escape(description)+", "+mysql.escape(uid)+");";
-console.log(query);
 	connection.query(query, function(err, rows){
 		if(err)
-			console.log("Could not add entry to database "+err);
+			console.log("Could not add entry to dashboard database "+err);
 		callbackFunction(err);
 	});
 }
 
-addDashboard("my_dash",null, function(err){
-	addGraph("my_graph","alabalaportocala","celsius","3f0ff286b5ba4238976c715c4cf598c2",function(err){});
-});
-
 function addGraph(name, description, unit, dashboard, callbackFunction)
-{
+{connection.query(query, function(err){connection.query(query, function(err){
+						callbackFunction(err);
+					});
+						callbackFunction(err);
+					});
 	name = parseName(name);
-	var signalTable = config.prefix+dashboard+name;
 	var query = "insert into "+graphTable+" (name, description, unit, dashboard) values ("+mysql.escape(name)+
 				", "+mysql.escape(description)+", "+mysql.escape(unit)+", "+mysql.escape(dashboard)+");";
 	connection.query(query, function(err, rows){
 		if(err)
-			console.log("Could not add entry to database "+err);
-		// else
-		// {
-		// 	// query = "create table "+signalTable+" (timestamp TIMESTAMP(3) NOT NULL, value DOUBLE NOT NULL, PRIMARY KEY(timestamp));";
-		// 	// connection.query(query, function(err, rows){
-		// 	// 	if(err)
-		// 	// 		console.log("Could not add entry to database "+err);
-		// 	// });
-		// }
+			console.log("Could not add entry to graph database "+err);
 		callbackFunction(err);
 	});
 }
 
-function addSignal(timestamp, value, dashboard, callbackFunction)
+function addSignalToGraph(signalid, graphid, callbackFunction)
 {
-	var dataName = config.prefix+dashboard+graph;
+	var query = "insert into ?? (signalid, graphid) values (?, ?)";
+	query = mysql.format(query,[correspondenceTable,signalid,graphid]);
+	connection.query(query, function(err, rows){
+		if(err)
+			console.log("Could not add value to table "+correspondenceTable+" "+err);
+		callbackFunction(err);
+	});
+}
+
+function addSignal(name, dashboarduuid, graphid, callbackFunction)
+{
+	var query = "select id from "+signalTable+" where name="+mysql.escape(name)+" and dashboarduuid="+
+				mysql.escape(dashboarduuid)+";";
+	connection.query(query, function(err,rows){
+		if(!err)
+		{
+			if(rows.length == 0)
+			{
+				query = "insert into "+signalTable+" (name, dashboarduuid) values ("+mysql.escape(name)+
+						", "+mysql.escape(dashboarduuid)+");";
+				connection.query(query, function(err, rows){
+					if(!err)
+					{
+						var signalid = rows.insertId;
+						var signalTable =signalTablePrefix+signalid;
+						query = "create table ?? (ts timestamp(3) not null , value DOUBLE NOT NULL, PRIMARY KEY(ts))";
+						query = mysql.format(query, signalTable);
+						connection.query(query, function(err,rows){
+							if(err)
+								console.log("Could not create table "+signalTable+" "+err);
+							else
+								addSignalToGraph(signalid,graphid,callbackFunction);
+						});
+					}
+					else
+						console.log("Could not add to table "+signalTable+" "+err);
+				});
+			}
+			else
+			{
+				var signalid = rows.id;
+				addSignalToGraph(signalid, graphid, callbackFunction)
+			}
+		}
+		else
+			console.log(signalTable+" database error: "+err);
+	});
+}
+
+function addSignalValue(timestamp, value, signalid, callbackFunction)
+{
+	var signalValueTable = config.prefix+signalid;
 	var query = "insert into "+dataName+" (timestamp, value) values (from_unixtime("+timestamp+"), "+
 				mysql.escape(value)+");";
 	connection.query(query, function(err, rows){
@@ -89,17 +134,19 @@ function addSignal(timestamp, value, dashboard, callbackFunction)
 	});
 }
 
-function deleteDashboard(dashboardId, callbackFunction)
+function clearSignalValueTables(callbackFunction)
 {
-	var dashboardTable = config.prefix + 'dashboard';
-	var signalsTable = config.prefix+mysql.escape(dashboardId);
-	var query = "delete from "+dashboardTable+" where id = "+mysql.escape(dashboardId)+";";
-	var tables = "";
+	var query = "select id from ?? ";
+	query = mysql.format(query, signalTable);
 	connection.query(query, function(err, rows){
-		if(err)
-			console.log("Could not delete dasboard");
-		else
+		if(!err)
 		{
+			var existentSignals  = [];
+			var allSignals = [];
+			for(var i =0; i<rows.length; i++)
+			{
+				existentSignals.push(rows[i].id);
+			}
 			query = "show tables;";
 			connection.query(query, function(err, rows){
 				if(!err)
@@ -107,71 +154,115 @@ function deleteDashboard(dashboardId, callbackFunction)
 					for(var i=0; i<rows.length; i++)
 					{
 						var row = rows[i]['Tables_in_'+config.database];
-						if(row.substring(0,signalsTable.length) == signalsTable)
-						{
-							tables = tables+row+", ";
-						}
+						if(row.substring(0,signalTablePrefix.length) == signalTablePrefix)
+							allSignals.push(row.substring(signalTablePrefix.length));
 					}
-					tables = tables.substring(0,tables.length-2);
-					query = "drop table if exists "+tables+";";
-					connection.query(query, function(err){
+					var toDelete = _.difference(allSignals, existentSignals);
+					var tables = "";
+					for(var i=0; i<toDelete.length; i++)
+					{
+						tables = tables+signalTablePrefix+toDelete[i]+",";
+					}
+					tables = tables.substring(0,tables.length-1);
+					if(tables.length>0)
+					{
+						query = "drop table if exists "+tables+";";
+						connection.query(query, function(err){
+							callbackFunction(err);
+						});
+					}
+					else
 						callbackFunction(err);
-					});
 				}
-			})
+				else
+				{
+					console.log("Cannot display tables "+err);
+					callbackFunction(err);
+				}
+			});
+		}
+		else 
+		{
+			console.log("Cannot access table "+signalTable+' '+err);
+			callbackFunction(err);
+		}
+	});
+}
+
+function deleteDashboard(dashboardId, callbackFunction)
+{
+	var signalsTable = config.prefix+mysql.escape(dashboardId);
+	var query = "delete from "+dashboardTable+" where id = "+mysql.escape(dashboardId)+";";
+	var tables = "";
+	connection.query(query, function(err, rows){
+		if(err)
+			console.log("Could not delete table "+dashboardTable+' '+err);
+		else
+		{
+			clearSignalValueTables(function(err){
+				callbackFunction(err);
+			});
 		}
 	});
 }
 
 function deleteGraphFromDashboard(graphId, dashboardId, callbackFunction)
 {
-	var graphTable = config.prefix+'graph';
-	getGraphName(graphId, function(err, name){
-		if(!err && name)
+	var query = "delete from "+mysql.escape(graphTable)+" where id = "+mysql.escape(graphId)+";";
+	connection.query(query, function(err, rows){
+		if(err)
+			console.log("Could not delete graph "+graphId+err);
+		callbackFunction(err);
+	});
+}
+
+function deleteSignal(signalid, callbackFunction)
+{
+	var query = "delete from ?? where id = ?";
+	query = mysql.format(query,[signalTable, signalid]);
+	connection.query(query,function(err, rows){
+		if(err)
 		{
-			var signalsTable = config.prefix+mysql.escape(dashboardId)+name;
-			var query = "delete from "+graphTable+" where id = "+graphId+";";
-			connection.query(query, function(err, rows){
-				if(!err)
-				{
-					query = "drop table if exists "+signalsTable+";";
-					connection.query(query,function(err, rows){
-						callbackFunction(err);
-					});
-				}
-				else
-				{
-					console.log("Could not delete graph");
-					callbackFunction(err);
-				}
-			});
+			console.log("Could not delete signal "+signalid+" "+err);
+			callbackFunction(err);
 		}
 		else
 		{
-			console.log("Graph does not exist");
-			callbackFunction(-1);
+			clearSignalValueTables(function(err){
+				callbackFunction(err);
+			});
 		}
 	});
 }
 
-function getGraphName(graphId, callbackFunction)
+function getAllDashboards(callbackFunction)
 {
-	var graphTable = config.prefix+'graph';
-	var query = "select name from "+graphTable+" where id = "+mysql.escape(graphId)+";";
+	var query = "select * from ??";
+	query = mysql.format(query,dashboardTable);
 	connection.query(query, function(err,rows){
-		if(!err && rows.length>0)
+		if(!err)
 		{
-			callbackFunction(null,rows[0].name);
+			callbackFunction(err, rows);
 		}
 		else
-			callbackFunction(err, null);
-	})
+		{
+			console.log("Could not retrieve data from table "+dashboardTable+" "+err);
+			callbackFunction(err);
+		}
+	});
 }
 
 
-
-// addSignal(1196440219,12,'g', 2, function(err){
-// 	console.log(err);
-// });
-
-//deleteDashboard(1, function(err){});
+// function getGraphName(graphId, callbackFunction)
+// {
+// 	var graphTable = config.prefix+'graph';
+// 	var query = "select name from "+graphTable+" where id = "+mysql.escape(graphId)+";";
+// 	connection.query(query, function(err,rows){
+// 		if(!err && rows.length>0)
+// 		{
+// 			callbackFunction(null,rows[0].name);
+// 		}
+// 		else
+// 			callbackFunction(err, null);
+// 	})
+// }
