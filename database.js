@@ -252,17 +252,115 @@ function getAllDashboards(callbackFunction)
 	});
 }
 
+function getDashboardGraphs(dashboardid, callbackFunction)
+{
+	var query = "select * from ?? where dashboard = ?";
+	query = mysql.format(query,[graphTable, dashboard]);
+	connection.query(query, function(err,rows){
+		if(!err)
+		{
+			callbackFunction(err, rows);
+		}
+		else
+		{
+			console.log("Could not retrieve data from table "+dashboardTable+" "+err);
+			callbackFunction(err);
+		}
+	});
+}
 
-// function getGraphName(graphId, callbackFunction)
-// {
-// 	var graphTable = config.prefix+'graph';
-// 	var query = "select name from "+graphTable+" where id = "+mysql.escape(graphId)+";";
-// 	connection.query(query, function(err,rows){
-// 		if(!err && rows.length>0)
-// 		{
-// 			callbackFunction(null,rows[0].name);
-// 		}
-// 		else
-// 			callbackFunction(err, null);
-// 	})
-// }
+function getDashboardSignals(dashboardid, callbackFunction)
+{
+	var query = "select uuid from ?? where id = ?";
+	query = mysql.format(query,[dashboardTable, dashboardid]);
+	connection.query(query, function(err,rows){
+		if(!err)
+		{
+			if(rows.length>0)
+			{
+				var dashboarduuid = rows[0].id;
+				query = "select * from ?? where dashboarduuid = ?";
+				query = mysql.format(query, [signalTable, dashboarduuid]);
+				connection.query(query, function(err, rows){
+					if(!err)
+					{
+						callbackFunction(err, rows);
+					}
+					else
+						callbackFunction(err);
+				});
+			}
+			else
+				callbackFunction(err, []);
+		}
+		else
+		{
+			console.log("Could not retrieve data from table "+dashboardTable+" "+err);
+			callbackFunction(err);
+		}
+	});
+}
+
+function getGraphSignals(graphid, callbackFunction)
+{
+	var query = "select signalid from ?? where graphid = ?";
+	query = mysql.format(query,[correspondenceTable, graphid]);
+	connection.query(query, function(err,rows){
+		if(!err)
+		{
+			if(rows.length>0)
+			{
+				var signalid = rows[0].signalid;
+				query = "select * from ?? where id = ?";
+				query = mysql.format(query, [signalTable, signalid]);
+				connection.query(query, function(err, rows){
+					if(!err)
+					{
+						callbackFunction(err, rows);
+					}
+					else
+						callbackFunction(err);
+				});
+			}
+			else
+				callbackFunction(err, []);
+		}
+		else
+		{
+			console.log("Could not retrieve data from table "+graphTable+" "+err);
+			callbackFunction(err);
+		}
+	});
+}
+
+function getSignalValues(signalid, callbackFunction)
+{
+	var query = "select * from";
+	var tableName = signalTablePrefix+signalid;
+	query = mysql.format(query,tableName);
+	connection.query(query, function(err,rows){
+		if(!err)
+		{
+			callbackFunction(err, rows);
+		}
+		else
+		{
+			console.log("Could not retrieve data from table "+tableName+" "+err);
+			callbackFunction(err);
+		}
+	});
+}
+
+function getGraphName(graphId, callbackFunction)
+{
+	var graphTable = config.prefix+'graph';
+	var query = "select name from "+graphTable+" where id = "+mysql.escape(graphId)+";";
+	connection.query(query, function(err,rows){
+		if(!err && rows.length>0)
+		{
+			callbackFunction(null,rows[0].name);
+		}
+		else
+			callbackFunction(err, null);
+	})
+}
