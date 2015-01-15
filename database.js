@@ -56,11 +56,7 @@ function addDashboard(name, description,callbackFunction)
 }
 
 function addGraph(name, description, unit, dashboard, callbackFunction)
-{connection.query(query, function(err){connection.query(query, function(err){
-						callbackFunction(err);
-					});
-						callbackFunction(err);
-					});
+{
 	name = parseName(name);
 	var query = "insert into "+graphTable+" (name, description, unit, dashboard) values ("+mysql.escape(name)+
 				", "+mysql.escape(description)+", "+mysql.escape(unit)+", "+mysql.escape(dashboard)+");";
@@ -122,15 +118,37 @@ function addSignal(name, dashboarduuid, graphid, callbackFunction)
 	});
 }
 
-function addSignalValue(timestamp, value, signalid, callbackFunction)
+function addSignalValue(timestamp, value, name, dashuuid, callbackFunction)
 {
-	var signalValueTable = config.prefix+signalid;
-	var query = "insert into "+dataName+" (timestamp, value) values (from_unixtime("+timestamp+"), "+
-				mysql.escape(value)+");";
+	var query = "select id from ?? where name = ? and dashboarduuid = ?";
+	query = mysql.format(query,[signalTable,name,dashuuid]);
 	connection.query(query, function(err, rows){
-		if(err)
-			console.log("Could not add entry to database "+err);
-		callbackFunction(err);
+		if(!err)
+		{
+			if(rows.length>0)
+			{
+				var signalid = rows[0].id;
+				var signalValueTable = signalTablePrefix+signalid;
+				query = "insert into "+signalValueTable+" (ts, value) values (from_unixtime("+timestamp+"), "+
+						mysql.escape(value)+");";
+				connection.query(query, function(err, rows){
+				if(err)
+					console.log("Could not add entry to database "+err);
+				callbackFunction(err);
+				});		
+			}
+			else
+			{
+				console.log("Permission denied");
+				callbackFunction(-1);
+			}
+			
+		}
+		else
+		{
+			console.log("Could not acces table "+signalTable+' '+err);
+			callbackFunction(err);
+		}	
 	});
 }
 
@@ -255,7 +273,7 @@ function getAllDashboards(callbackFunction)
 function getDashboardGraphs(dashboardid, callbackFunction)
 {
 	var query = "select * from ?? where dashboard = ?";
-	query = mysql.format(query,[graphTable, dashboard]);
+	query = mysql.format(query,[graphTable, dashboardid]);
 	connection.query(query, function(err,rows){
 		if(!err)
 		{
@@ -303,7 +321,7 @@ function getDashboardSignals(dashboardid, callbackFunction)
 
 function getGraphSignals(graphid, callbackFunction)
 {
-	var query = "select signalid from ?? where graphid = ?";
+	var query = "select * from ?? where graphid = ?";
 	query = mysql.format(query,[correspondenceTable, graphid]);
 	connection.query(query, function(err,rows){
 		if(!err)
@@ -351,10 +369,9 @@ function getSignalValues(signalid, callbackFunction)
 	});
 }
 
-function getGraphName(graphId, callbackFunction)
+function getDashboard(dashboardid, callbackFunction)
 {
-	var graphTable = config.prefix+'graph';
-	var query = "select name from "+graphTable+" where id = "+mysql.escape(graphId)+";";
+	var query = "select * from "+dashboardTable+" where id = "+mysql.escape(dashboard)+";";
 	connection.query(query, function(err,rows){
 		if(!err && rows.length>0)
 		{
@@ -364,3 +381,51 @@ function getGraphName(graphId, callbackFunction)
 			callbackFunction(err, null);
 	})
 }
+
+function getLatestSignalValue(signalid, callbackFunction)
+{
+	var signalValueTable = signalTablePrefix+signalid;
+	var query = "SELECT * FROM ??  WHERE  ts =  ( SELECT MAX( ts ) FROM ??)";
+	query = mysql.format(query, [signalValueTable, signalValueTable]);
+	connection.query(query, function(err, rows){
+		if(!err)
+		{
+			if(rows.length>0)
+			{
+				callbackFunction(err, rows[0].value);
+			}
+			else
+			{
+				console.log("No signals "+signalid);
+				callbackFunction("No signals "+signalid);
+			}
+		}
+		else
+		{
+			console.log("Could not retriebe data from table "+signalValueTable+" "+err);
+			callbackFunction(err);
+		}
+	});
+}
+
+function getSignalValueInInterval(signalid, min, max, callbackFunction)
+{
+	var signalValueTable = signalTablePrefix+signalid;
+	var query = "select value from ?? where ts between from_unixtime(?) and from_unixtime(?)";
+	query = mysql.format(query,[signalValueTable, min, max]);
+	connection.query(query, function(err, rows){
+		callbackFunction(err, rows);
+	});
+}
+
+exports.getDashboard = getDashboard;
+exports.getAllDashboards = getAllDashboards;
+exports.getDashboardGraphs = getDashboardGraphs;
+exports.addDashboard = addDashboard;
+exports.deleteDashboard = deleteDashboard;
+exports.addGraph = addGraph;
+exports.addSignal = addSignal;
+exports.getGraphSignals = getGraphSignals;
+exports.addSignalValue = addSignalValue;
+exports.getLatestSignalValue = getLatestSignalValue;
+exports.getSignalValueInInterval = getSignalValueInInterval;
