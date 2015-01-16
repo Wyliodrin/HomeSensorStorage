@@ -1,0 +1,256 @@
+/* Based on Foundation by ZURB */
+
+.template{
+	visibility: hidden;
+}
+
+.row {
+  width: 100%; max-width: 100%;
+  margin: 0 auto;
+  height:100%; max-height:100%;
+}
+.row .row { min-width: 0px; }
+
+.col, .cols {
+  margin-left: 0.00%;
+  float: left;
+  min-height: 1px;
+  position: relative;
+}
+.col:first-child, .cols:first-child {
+  margin-left: 0px;
+}
+.row .one.cols { width: 8.333333333333332%; }
+.row .two.cols { width: 16.666666666666664%; }
+.row .three.cols { width: 24.999999999999996%; }
+.row .four.cols { width: 33.33333333333333%; }
+.row .five.cols { width: 41.66666666666666%; }
+.row .six.cols { width: 49.99999999999999%; }
+.row .seven.cols { width: 58.33333333333333%; }
+.row .eight.cols { width: 66.66666666666666%; }
+.row .nine.cols { width: 74.99999999999999%; }
+.row .ten.cols { width: 83.33333333333331%; }
+.row .eleven.cols { width: 91.66666666666666%; }
+.row .twelve.cols { width: 99.99999999999999%; }
+
+
+.row .offset-by-one 	{ margin-left: 13.1%;  }
+.row .offset-by-two 	{ margin-left: 21.8%;  }
+.row .offset-by-three 	{ margin-left: 30.5%;  }
+.row .offset-by-four 	{ margin-left: 39.2%;  }
+.row .offset-by-five 	{ margin-left: 47.9%;  }
+.row .offset-by-six 	{ margin-left: 56.6%;  }
+.row .offset-by-seven 	{ margin-left: 65.3%;  }
+.row .offset-by-eight 	{ margin-left: 74.0%;  }
+.row .offset-by-nine 	{ margin-left: 82.7%;  }
+.row .offset-by-ten 	{ margin-left: 91.4%;  }
+/*.row .offset-by-eleven 	{ margin-left: 95.7%;  }*/
+
+
+/* css */
+
+html { font-size: 62.5%; }
+body { font-size:1.3rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }
+form, label, input, select, textarea { font-size:1.2rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;  }
+select { padding:0.2rem;}
+
+.postfix { font-size:1.2rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }
+
+.main { min-height:100%;}
+.logo { padding:50px 0;}
+.sidenav {background: #191e25; min-height:100%; position: fixed; float:left;}
+.user{ color:#FFF; font-family:Tahoma, Geneva, sans-serif; font-size:1.6rem;}
+.user span{ color:#bfc9d8;}
+
+
+.side-nav {
+  display: block;
+  margin: 0;
+  padding: 0.875rem 0;
+  list-style-type: none;
+  list-style-position: outside;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }
+  .side-nav li {
+    margin: 0 0 0.4375rem 0;
+    font-size: 1.2rem;
+    font-weight: normal; }
+    .side-nav li a:not(.button) {
+      display: block;
+      color: #FFF;
+      margin: 0;
+      padding: 0.4375rem 0.875rem; }
+      .side-nav li a:not(.button):hover, .side-nav li a:not(.button):focus {
+        background: #494e53;
+        color: #fff; }
+    .side-nav li.active > a:first-child:not(.button) {
+      color: #1cc7ff;
+      font-weight: normal;
+      font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }
+    .side-nav li.divider {
+      border-top: 1px solid;
+      height: 0;
+      padding: 0;
+      list-style: none;
+      border-top-color: #494e53; }
+    .side-nav li.heading {
+      color: #008CBA;
+      font-size: 0.875rem;
+      font-weight: bold;
+      text-transform: uppercase; }
+	  
+h3 { font-size:2.8rem; font-family: Georgia, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;}
+h4 { font-size:1.7rem; font-family: Georgia, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;}
+
+.content-padding { padding:30px 20px 0 20px;}
+.breadcrumbs li { font-size:1.1rem;}
+
+  .row .row {
+    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: none; }
+
+.dashboard-item {  padding: 0.5625rem 0.375rem 0.5625rem; border-style: solid; border-width: 1px; background-color: #fff; border-color: gainsboro; border-radius: 3px;}
+.d-settings { padding:2px 7px;}
+.dashboard-txt { padding:10px 10px; line-height:25px;}
+
+.f-dropdown li{ font-size:1.1rem; padding:3px;}
+
+.graphs-container li{ padding:5px; min-height:270px !important;}
+
+.mobile-top { display:none;}
+
+.right-off-canvas-menu {
+background: #191e25;
+width: 25.625rem;
+}
+
+.mobile-menu { padding:40px 20px;}
+
+.logo2 { display:none;}
+
+.move-left > .inner-wrap {transform: translate3d(-25.625rem, 0, 0);}
+
+.reveal-modal h2 { margin-bottom:15px; font-family: Georgia, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;}
+
+.sensor-text { padding: 0 20px 0px 20px; display:block;}
+
+
+.accordion { display:none;
+  margin-bottom: 0; }
+  .accordion:before, .accordion:after {
+    content: " ";
+    display: table; }
+  .accordion:after {
+    clear: both; }
+  .accordion .accordion-navigation, .accordion dd {
+    display: block;
+    margin-bottom: 0 !important; }
+    .accordion .accordion-navigation.active > a, .accordion dd.active > a {
+      background: #fff; }
+    .accordion .accordion-navigation > a, .accordion dd > a {
+      background: #fff;
+      color: #0b90bd;
+      padding: 0rem;
+	  margin-top:1rem;
+      display: block;
+      font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+      font-size: 2rem; }
+      .accordion .accordion-navigation > a:hover, .accordion dd > a:hover {
+        background: #fff; }
+    .accordion .accordion-navigation > .content, .accordion dd > .content {
+      display: none;
+      padding: 0rem;
+	  font-size: 1.3rem; }
+      .accordion .accordion-navigation > .content.active, .accordion dd > .content.active {
+        display: block;
+        background: #FFFFFF; }
+
+
+
+
+
+
+      .size-12 { font-size: 12px; }
+      
+      .size-14 { font-size: 14px; }
+      
+      .size-16 { font-size: 16px; }
+      
+      .size-18 { font-size: 18px; }
+      
+      .size-21 { font-size: 21px; }
+      
+      .size-24 { font-size: 24px; }
+      
+      .size-36 { font-size: 36px; }
+      
+      .size-48 { font-size: 48px; }
+      
+      .size-60 { font-size: 60px; }
+      
+      .size-72 { font-size: 72px; }
+	  
+	  .blk { color:#000;}
+
+
+
+.ico { padding:10px 15px 5px 5px; }
+
+
+.widget {  padding: 0.5625rem 0.375rem 0.5625rem; border-style: solid; border-width: 1px; background-color: #fff; border-color: gainsboro; border-radius: 3px; margin-top:20px !important; min-height:300px; overflow:hidden;}
+.widget2 {  padding: 0.5625rem 0.375rem 0.5625rem; border-style: solid; border-width: 1px; background-color: #fff; border-color: gainsboro; border-radius: 3px; margin-top:20px !important; overflow:hidden; min-height:90px;}
+
+.w-value {background:#2D3142; color:#FFF; border-radius: 5px; height:300px;}
+.w-value div{color:#FFF; border-radius: 5px; font-size:3.5rem;}
+.l-value { color:#FFF; font-size:1.5rem; line-height:13rem;}
+
+.rounded {border-radius: 4px;}
+.panel-key { font-size:1.2rem; overflow: auto; overflow-y:hidden; border:#999 1px dashed; background:#FFF; margin-top:10px;}
+
+.switch { margin-top:10px;}
+.outpt{ margin:10px 0px 0 0;}
+
+@media only screen and (max-width: 40em) {
+	.sidenav {height:auto; display:none;}
+	  .side-nav li {
+    margin: 0 0 0.4375rem 0;
+	padding:0.7rem 0;
+    font-size: 1.4rem;
+	}
+	.mobile-top { display:block;}
+	.logo2 { padding:25px; display:block;}
+	.user{ color:#FFF; font-family:Tahoma, Geneva, sans-serif; font-size:1.5rem; margin-top:0px;}
+	
+	.sensor-text { display:none}
+	.accordion { display:block;}
+	
+	.widget { overflow:hidden;}
+	.w-value {background:#2D3142; color:#FFF; border-radius: 5px; height:50px; margin-top:250px;}
+	.w-value div{color:#FFF; border-radius: 5px; font-size:2.5rem; line-height:5rem; float:right; margin-right:1rem;}
+	.l-value { color:#FFF; font-size:1.5rem; line-height:5rem; float:left; margin-left:1rem;}
+}
+
+@media only screen and (min-width: 90.063em) and (max-width: 120em) {
+body { font-size:1.4rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }
+form, label, input, select, textarea { font-size:1.4rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;  }
+select { padding:0.2rem;}
+
+.postfix { font-size:1.4rem !important; font-weight: normal; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; }	
+.f-dropdown li{ font-size:1.3rem; padding:3px;}
+
+  .side-nav li {
+    margin: 0 0 0.6375rem 0;
+    font-size: 1.5rem;
+	}
+
+.user{ color:#FFF; font-family:Tahoma, Geneva, sans-serif; font-size:1.9rem;}
+
+h3 { font-size:3.8rem; font-family: Georgia, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;}
+h4 { font-size:2.4rem; font-family: Georgia, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;}
+
+.breadcrumbs li { font-size:1.3rem;}
+
+}

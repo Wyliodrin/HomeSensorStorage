@@ -55,11 +55,12 @@ function addDashboard(name, description,callbackFunction)
 	});
 }
 
-function addGraph(name, description, unit, dashboard, callbackFunction)
+function addGraph(name, description, unit, type,dashboard, callbackFunction)
 {
 	name = parseName(name);
-	var query = "insert into "+graphTable+" (name, description, unit, dashboard) values ("+mysql.escape(name)+
-				", "+mysql.escape(description)+", "+mysql.escape(unit)+", "+mysql.escape(dashboard)+");";
+	var query = "insert into "+graphTable+" (name, description, unit, type, dashboard) values ("+mysql.escape(name)+
+				", "+mysql.escape(description)+", "+mysql.escape(unit)+", "+mysql.escape(type)+", "
+				+mysql.escape(dashboard)+");";
 	connection.query(query, function(err, rows){
 		if(err)
 			console.log("Could not add entry to graph database "+err);

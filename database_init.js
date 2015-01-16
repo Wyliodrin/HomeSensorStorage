@@ -28,7 +28,7 @@ function createGraphs()
 				if(rows.length==0)
 				{
 					connection.query("CREATE  TABLE "+graphsName+"(id INT NOT NULL AUTO_INCREMENT,"+
-						"name VARCHAR(45) NOT NULL,description VARCHAR(45) NULL,unit VARCHAR(45) NOT NULL,dashboard INT NOT NULL,"+
+						"name VARCHAR(45) NOT NULL,description VARCHAR(45) NULL,unit VARCHAR(45) NOT NULL,type VARCHAR(45),dashboard INT NOT NULL,"+
 					"PRIMARY KEY (id),INDEX dashboard (dashboard ASC),CONSTRAINT dash"+
 					" FOREIGN KEY (dashboard) REFERENCES "+dashboardName+"(id)"+
 					" ON DELETE CASCADE\n ON UPDATE CASCADE);", function(err, rows){

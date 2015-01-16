@@ -1,5 +1,6 @@
 var express = require('express');
 var database = require('../database.js');
+var path = require('path');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -7,6 +8,8 @@ var database = require('../database.js');
 // });
 
 //module.exports = router;
+
+var html_dir = path.join(__dirname, '../public/html');
 
 function getDasboards(req, res)
 {
@@ -58,7 +61,7 @@ function getGraphs(req, res)
 function addGraph(req, res)
 {
 	var body = req.body;
-	database.addGraph(body.name, body.description, body.unit, body.dashboardid,function(err){
+	database.addGraph(body.name, body.description, body.unit, body.type, body.dashboardid,function(err){
 		if(!err)
 			res.status(200).send({status:"done"});
 		else
@@ -127,9 +130,13 @@ function getSignalValue(req, res)
 	});
 }
 
+function loadDashboards(req, res) {
+    res.sendFile(path.join(html_dir, 'index.html'));
+}
+
 module.exports=function(app)
 {
-	app.post("/get_hboards",getDasboards);
+	app.post("/get_dashboards",getDasboards);
 	app.post("/get_dash_graph", getGraphs);
 	app.post("/get_graph_signals", getSignals);
 	app.post("/add_dashboard", addDashboard);
@@ -140,4 +147,5 @@ module.exports=function(app)
 	app.post("/add_signal_value", addSignalValue);
 	app.post("/get_latest_signal", getLatestSignal);
 	app.post("/get_signal_value", getSignalValue);
+	app.get("/dashboards", loadDashboards);
 }
