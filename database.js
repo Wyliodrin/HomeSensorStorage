@@ -68,6 +68,8 @@ function addGraph(name, description, unit, type,dashboard, callbackFunction)
 	});
 }
 
+addGraph("gr", null, null, "sensor", 2,function(err){});
+
 function addSignalToGraph(signalid, graphid, callbackFunction)
 {
 	var query = "insert into ?? (signalid, graphid) values (?, ?)";
@@ -372,11 +374,11 @@ function getSignalValues(signalid, callbackFunction)
 
 function getDashboard(dashboardid, callbackFunction)
 {
-	var query = "select * from "+dashboardTable+" where id = "+mysql.escape(dashboard)+";";
+	var query = "select * from "+dashboardTable+" where id = "+mysql.escape(dashboardid)+";";
 	connection.query(query, function(err,rows){
 		if(!err && rows.length>0)
 		{
-			callbackFunction(null,rows[0].name);
+			callbackFunction(null,rows[0]);
 		}
 		else
 			callbackFunction(err, null);
@@ -403,7 +405,7 @@ function getLatestSignalValue(signalid, callbackFunction)
 		}
 		else
 		{
-			console.log("Could not retriebe data from table "+signalValueTable+" "+err);
+			console.log("Could not retrieve data from table "+signalValueTable+" "+err);
 			callbackFunction(err);
 		}
 	});
@@ -421,6 +423,7 @@ function getSignalValueInInterval(signalid, min, max, callbackFunction)
 
 exports.getDashboard = getDashboard;
 exports.getAllDashboards = getAllDashboards;
+exports.getDashboard = getDashboard;
 exports.getDashboardGraphs = getDashboardGraphs;
 exports.addDashboard = addDashboard;
 exports.deleteDashboard = deleteDashboard;

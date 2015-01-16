@@ -11,6 +11,19 @@ var path = require('path');
 
 var html_dir = path.join(__dirname, '../public/html');
 
+function getDashboard(req, res)
+{
+	database.getDashboard(req.body.id,function(err, dashboard){
+		if(!err)
+		{
+			res.status(200).send(dashboard);
+			console.log(dashboard);
+		}
+		else
+			res.status(500).send([]);
+	});
+}
+
 function getDasboards(req, res)
 {
 	database.getAllDashboards(function(err, dashboards){
@@ -130,13 +143,20 @@ function getSignalValue(req, res)
 	});
 }
 
-function loadDashboards(req, res) {
+function loadDashboards(req, res)
+{
     res.sendFile(path.join(html_dir, 'index.html'));
+}
+
+function listDashboardData(req, res)
+{
+	res.sendFile(path.join(html_dir, 'dashboard.html'))
 }
 
 module.exports=function(app)
 {
 	app.post("/get_dashboards",getDasboards);
+	app.post("/get_dashboard", getDashboard);
 	app.post("/get_dash_graph", getGraphs);
 	app.post("/get_graph_signals", getSignals);
 	app.post("/add_dashboard", addDashboard);
@@ -148,4 +168,5 @@ module.exports=function(app)
 	app.post("/get_latest_signal", getLatestSignal);
 	app.post("/get_signal_value", getSignalValue);
 	app.get("/dashboards", loadDashboards);
+	app.get("/dashboard/:id",listDashboardData);
 }
