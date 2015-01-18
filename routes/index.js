@@ -40,12 +40,12 @@ function addDashboard(req, res)
 {
 	var name = req.body.name;
 	var description = req.body.description;
-	database.addDashboard(name, description, function(err){
+	database.addDashboard(name, description, function(err, insertId){
 		console.log(err);
 		if(err)
-			res.status(500).send({"status":"error"});
+			res.status(200).send({"status":"error"});
 		else
-			res.status(200).send({"status":"done"});
+			res.status(200).send({"status":"done",id:insertId});
 	});
 }
 
@@ -65,20 +65,28 @@ function getGraphs(req, res)
 	var dashboardid = req.body.dashboardid;
 	database.getDashboardGraphs(dashboardid, function(err, graphs){
 		if(!err)
-			res.status(200).send(graphs);
+			res.status(200).send({status:"done",graphs:graphs});
 		else
-			res.status(500).send({status:"error"});
+			res.status(200).send({status:"error"});
 	});
 }
 
 function addGraph(req, res)
 {
 	var body = req.body;
-	database.addGraph(body.name, body.description, body.unit, body.type, body.dashboardid,function(err){
-		if(!err)
-			res.status(200).send({status:"done"});
+	database.addGraph(body.name, body.description, body.unit, body.type, body.dashboardid,function(err, graphid){
+		if(err)
+			res.status(200).send({status:"error"});
 		else
-			res.status(500).send({status:"error"});
+		{
+			console.log("add signal");
+			database.addSignal(body.signalName, body.dashboarduuid, graphid, function(err, signalid){
+				if(!err)
+					res.status(200).send({status:"done", signalid:signalid, graphid:graphid});
+				else
+					res.status(200).send({status:"error"});
+			});
+		}		
 	});
 }
 
@@ -104,10 +112,10 @@ function getSignals(req, res)
 	database.getGraphSignals(body.graphid, function(err, signals){
 		if(!err)
 		{
-			res.status(200).send(signals);
+			res.status(200).send({signals:signals, status:"done"});
 		}
 		else
-			res.status(500).send({status:"error"});
+			res.status(200).send({status:"error"});
 	});
 }
 
@@ -135,7 +143,7 @@ function getLatestSignal(req, res)
 function getSignalValue(req, res)
 {
 	var body = req.body;
-	database.getSignalValueInInterval(body.id, body.min, body.max, function(err, values){
+	database.getSignalValues(body.id, function(err, values){
 		if(!err)
 			res.status(200).send(values);
 		else
@@ -153,16 +161,53 @@ function listDashboardData(req, res)
 	res.sendFile(path.join(html_dir, 'dashboard.html'))
 }
 
+function getSignalValuesInterval(req,res)
+{
+	database.getSignalValueInInterval(req.body.id, req.body.min, req.body.max, function(err,values){
+		console.log(err);
+		console.log (values);
+		if(!err)
+			res.status(200).send(values);
+		else
+			res.status(500).send({status:"error"});
+	});
+}
+
+function addButton(req,res)
+{
+	console.log("add button");
+	database.addButton(req.body.dashboarduuid, req.body.type, req.body.name, req.body.value, function(err){
+		if(!err)
+			res.status(200).send({status:"done"});
+		else
+			res.status(200).send({status:"error"});
+	});
+
+}
+
+function getButtons(req, res)
+{
+	database.getButtons(req.body.dashboarduuid, function(err, buttons){
+		if(!err)
+			res.status(200).send({status:"done",buttons:buttons});
+		else
+			res.status(200).send({status:"error"});
+	});
+}
+
 module.exports=function(app)
 {
+	app.post("/add_button",addButton);
+	app.post("/add_dashboard", addDashboard);
+	//app.post("/add_signal", addSignal);
+	app.post("/add_graph",addGraph);
+	app.post("/get_buttons",getButtons);
 	app.post("/get_dashboards",getDasboards);
 	app.post("/get_dashboard", getDashboard);
 	app.post("/get_dash_graph", getGraphs);
 	app.post("/get_graph_signals", getSignals);
-	app.post("/add_dashboard", addDashboard);
-	app.post("/delete_dashboard", deleteDashboard);
-	app.post("/add_graph",addGraph);
-	app.post("/add_signal", addSignal);
+	app.post("/get_signal_values_interval",getSignalValuesInterval);
+	app.post("/delete_dashboard", deleteDashboard);	
 	app.post("/remove_signal", removeSignal);
 	app.post("/add_signal_value", addSignalValue);
 	app.post("/get_latest_signal", getLatestSignal);
