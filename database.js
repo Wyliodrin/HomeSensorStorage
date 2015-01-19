@@ -459,6 +459,7 @@ function getButtons(dashboarduuid, callbackFunction)
 {
 	var query = "select * from ?? where dashboarduuid=?";
 	query = mysql.format(query,[buttonTable,dashboarduuid]);
+	console.log(query);
 	connection.query(query, function(err,buttons){
 		callbackFunction(err, buttons);
 	});
@@ -468,7 +469,19 @@ function addButton(dashboarduuid, type, name, value, callbackFunction)
 {
 	var query = "insert into ?? (dashboarduuid, name, type, value) values (?,?,?,?)";
 	query = mysql.format(query,[buttonTable,dashboarduuid,name,type,value]);
-	connection.query(query,function(err, rows){
+	connection.query(query,function(err, result){
+		if(!err)
+			callbackFunction(err,result.insertId);
+		else
+			callbackFunction(err,null);
+	});
+}
+
+function updateButton(id,value,callbackFunction)
+{
+	var query = "update ?? set value=? where id=?";
+	query = mysql.format(query,[buttonTable, value, id]);
+	connection.query(query, function(err,result){
 		callbackFunction(err);
 	});
 }
@@ -489,3 +502,4 @@ exports.getGraphSignals = getGraphSignals;
 exports.addSignalValue = addSignalValue;
 exports.getLatestSignalValue = getLatestSignalValue;
 exports.getSignalValueInInterval = getSignalValueInInterval;
+exports.updateButton = updateButton;

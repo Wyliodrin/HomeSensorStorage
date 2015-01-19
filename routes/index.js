@@ -65,7 +65,15 @@ function getGraphs(req, res)
 	var dashboardid = req.body.dashboardid;
 	database.getDashboardGraphs(dashboardid, function(err, graphs){
 		if(!err)
-			res.status(200).send({status:"done",graphs:graphs});
+		{
+			database.getButtons(req.body.dashboarduuid, function(err, buttons){
+				console.log(buttons);
+				if(!err)
+					res.status(200).send({status:"done",buttons:buttons, graphs:graphs});
+				else
+					res.status(200).send({status:"error"});
+			});
+		}
 		else
 			res.status(200).send({status:"error"});
 	});
@@ -176,20 +184,30 @@ function getSignalValuesInterval(req,res)
 function addButton(req,res)
 {
 	console.log("add button");
-	database.addButton(req.body.dashboarduuid, req.body.type, req.body.name, req.body.value, function(err){
+	database.addButton(req.body.dashboarduuid, req.body.type, req.body.name, req.body.value, function(err, id){
 		if(!err)
-			res.status(200).send({status:"done"});
+			res.status(200).send({status:"done", id:id});
 		else
 			res.status(200).send({status:"error"});
 	});
 
 }
 
-function getButtons(req, res)
+// function getButtons(req, res)
+// {
+// 	database.getButtons(req.body.dashboarduuid, function(err, buttons){
+// 		if(!err)
+// 			res.status(200).send({status:"done",buttons:buttons});
+// 		else
+// 			res.status(200).send({status:"error"});
+// 	});
+// }
+
+function updateButton(req, res)
 {
-	database.getButtons(req.body.dashboarduuid, function(err, buttons){
+	database.updateButton(req.body.id, req.body.value, function(err){
 		if(!err)
-			res.status(200).send({status:"done",buttons:buttons});
+			res.status(200).send({status:"done"});
 		else
 			res.status(200).send({status:"error"});
 	});
@@ -201,10 +219,10 @@ module.exports=function(app)
 	app.post("/add_dashboard", addDashboard);
 	//app.post("/add_signal", addSignal);
 	app.post("/add_graph",addGraph);
-	app.post("/get_buttons",getButtons);
+	//app.post("/get_buttons",getButtons);
 	app.post("/get_dashboards",getDasboards);
 	app.post("/get_dashboard", getDashboard);
-	app.post("/get_dash_graph", getGraphs);
+	app.post("/get_dash_graph_button", getGraphs);
 	app.post("/get_graph_signals", getSignals);
 	app.post("/get_signal_values_interval",getSignalValuesInterval);
 	app.post("/delete_dashboard", deleteDashboard);	
@@ -214,4 +232,5 @@ module.exports=function(app)
 	app.post("/get_signal_value", getSignalValue);
 	app.get("/dashboards", loadDashboards);
 	app.get("/dashboard/:id",listDashboardData);
+	app.post("/update_button",updateButton);
 }

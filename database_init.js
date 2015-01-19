@@ -89,7 +89,7 @@ function createButtons()
 			if(rows.length == 0)
 			{
 				query = "CREATE TABLE ?? (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, dashboarduuid VARCHAR(150) NOT NULL, "+
-					"name VARCHAR(45) NOT NULL, type INT,value INT ,CONSTRAINT cons FOREIGN KEY(dashboarduuid) REFERENCES ??(uuid) "+
+					"name VARCHAR(45) NOT NULL, type VARCHAR(45),value INT ,CONSTRAINT cons FOREIGN KEY(dashboarduuid) REFERENCES ??(uuid) "+
 					"ON UPDATE CASCADE ON DELETE CASCADE, CONSTRAINT uc_n_DASH UNIQUE (name, dashboarduuid))";
 				query = mysql.format(query, [buttonTable, dashboardName]);
 				console.log(query);

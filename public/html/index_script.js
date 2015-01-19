@@ -31,18 +31,17 @@ $(document).ready(function()
 
 function addDashboard(name, dashboardid, buttons, sensors, graphType)
 {
+	console.log("add dashboard "+dashboardid);
 	var myDashboard = $(".my_dashboard").clone();
-	myDashboard.removeClass("template dashboard");
-	myDashboard.find(".sensors_count").append(sensors);
-	myDashboard.find(".buttons_count").append(buttons);
+	myDashboard.removeClass("template my_dashboard");
+	myDashboard.find(".sensors_count").append(sensors.length);
+	myDashboard.find(".buttons_count").append(buttons.length);
 	myDashboard.find(".boards_count").append("-");
 	var url = "dashboard/"+dashboardid;
 	myDashboard.find(".dash_name").text(name).attr("href", url);
-
 	for(var i=0; i<graphType.length; i++)
 	{
 		var g = graphType[i];
-		console.log(g);
 	 	var graphPrev = $(".graph_preview").clone();
 		graphPrev.removeClass("template graph_preview");
 		graphPrev.find(".graph_preview_name").text(g.name);
@@ -58,28 +57,19 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 function getGraphs(dashboard)
 {
 	var dashboardid = dashboard.id;
-	$.post("/get_dash_graph", {"dashboardid":dashboardid}, function(response,textStatus){
+	$.post("/get_dash_graph_button", {"dashboardid":dashboardid, dashboarduuid:dashboard.uuid}, function(response,textStatus){
 		if(response.status == "done")
 		{
 			var graphs = response.graphs;
-			var sensors = 0;
-			var buttons = 0;
+			var buttons = response.buttons;
+			console.log(buttons);
 			var graphsPreview = [];
-			for(var j=0; j<graphs.length; j++)
+			var i=0;
+			while ((i<graphs.length) && (graphsPreview<4))
 			{
-				console.log(j);
-				var g = graphs[j];
-				if((g.type == "button_check") || (g.type == "button_slide"))
-					buttons++;
-				else
-				{
-					sensors++;
-					if(graphsPreview.length<4)
-						graphsPreview.push(g);
-				}
+				graphsPreview.push(graphs[i]);
 			}
-			console.log("sensors");
-			addDashboard(dashboard.name, dashboardid, buttons, sensors, graphsPreview);
+			addDashboard(dashboard.name, dashboardid, buttons, graphs, graphsPreview);
 		}
 });
 }

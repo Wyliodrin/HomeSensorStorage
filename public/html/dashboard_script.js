@@ -231,47 +231,27 @@ $(document).ready(function()
             if(name.length > 0)
             {   
                 var type = $("input:radio[name=btntype]:checked").val();
+                console.log("type = "+type);
                 var description = $("#add_button_description").val();
                 $.post("/add_button",{dashboarduuid:dash.uuid,type:type,name:name,value:0},function(result, textStatus){
-                    //
+                    if(result.status == "done")
+                        addButton({dashboarduuid:dash.uuid,type:type,name:name,value:0, id:status.id});
                 });
             }            
         });
 
-     	$.post("/get_dash_graph",{dashboardid:dash.id},function(result, textStatus){
+     	$.post("/get_dash_graph_button",{dashboardid:dash.id, dashboarduuid:dash.uuid},function(result, textStatus){
             if(result.status == "done")
             {
-                var buttons=[];
-                var sensors=[];
-                var graphs = result.graphs;
-                for(var i=0; i<graphs.length; i++)
-                {
-                    var g = graphs[i];
-                    if((g.type == "button_check") || (g.type == "button_slide"))
-                        buttons.push(g);
-                    else
-                        sensors.push(g);
-                }
+                var sensors = result.graphs;
+                var buttons = result.buttons;
                 $("#sensor_count").text(sensors.length);
                 $("#button_count").text(buttons.length);
                 $("#board_count").text("-");
                 for(var i=0; i<buttons.length; i++)
                 {
                     var b = buttons[i];
-                    if(b.type == "button_slide")
-                    {
-                        var myButton = $(".button_slide").clone();
-                        myButton.removeClass("template button_slide");
-                        $("#button_area").append(myButton);
-                        myButton.find(".button_name").text(b.name);
-                    }
-                    else if(b.type == "button_check")
-                    {
-                        var myButton = $(".button_check").clone();
-                        myButton.removeClass("template button_check");
-                        $("#button_area").append(myButton);
-                        myButton.find(".button_name").text(b.name);
-                    }
+                    addButton(b);
                 }
                 for(var i=0; i<sensors.length; i++)
                 {
@@ -304,6 +284,48 @@ $(document).ready(function()
         });
      });
 });
+
+function addButton(b)
+{
+    if(b.type == "slider")
+    {
+        var myButton = $(".button_slide").clone();
+        myButton.removeClass("template button_slide");
+        myButton.foundation('slider', 'set_value', b.value);
+        console.log("set value");
+        $("#button_area").append(myButton);
+        myButton.find(".button_name").text(b.name);
+        myButton.find(".slider_id").attr("id","sliderOutput"+b.id);
+        myButton.find(".slider_options").attr("data-options","display-selector:# sliderOutput"+b.id+";");
+        myButton.on('change.fndtn.slider', function(){
+            $.post("/update_button",{value:myButton.find(".range-slider").attr('data-slider'),id:b.id},
+                function(result, textStatus){
+                    //TODO-make efficient, less requests
+            });
+        });
+
+    }
+    else if(b.type == "switch")
+    {
+        var value = b.value;
+        var myButton = $(".button_check").clone();
+        var setChecked = myButton.find(".set_checked");
+        myButton.removeClass("template button_check");
+        setChecked.attr("id",b.id);
+        myButton.find(".l_set_ckecked").attr("for",b.id);
+        if(b.value == 1)
+            setChecked.attr("checked",'');
+        $("#button_area").append(myButton);
+        myButton.find(".button_name").text(b.name);
+        setChecked.click(function(){
+            value = 1-value;
+            $.post("/update_button",{value:value,id:b.id},
+                function(result, textStatus){
+                    //TODO-make efficient, less requests
+            });
+        });
+    }
+}
 
 function addGraph(graph, signals)
 {
