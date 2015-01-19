@@ -3,5 +3,6 @@
 	"username":"root",
 	"password":"root",
 	"prefix":"w",
-	"database":"signals"
+	"database":"signals",
+	"loginPassword":"123456"
 }

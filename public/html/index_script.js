@@ -45,7 +45,7 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 	 	var graphPrev = $(".graph_preview").clone();
 		graphPrev.removeClass("template graph_preview");
 		graphPrev.find(".graph_preview_name").text(g.name);
-		graphPrev.find(".graph_preview_image").attr("src","/img/"+g.type+".png");
+		graphPrev.find(".graph_preview_image").attr("src","/html/img/"+g.type+".png");
 		myDashboard.find(".graph_prev").append(graphPrev);
 	}	
 

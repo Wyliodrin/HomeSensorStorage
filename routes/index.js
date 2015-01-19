@@ -1,6 +1,7 @@
 var express = require('express');
 var database = require('../database.js');
 var path = require('path');
+var config = require('../config.js').data;
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -161,7 +162,14 @@ function getSignalValue(req, res)
 
 function loadDashboards(req, res)
 {
+	console.log("load dashboards");
     res.sendFile(path.join(html_dir, 'index.html'));
+}
+
+function loadLogin(req, res)
+{
+	console.log("load login");
+	res.sendFile(path.join(html_dir, 'login.html'));
 }
 
 function listDashboardData(req, res)
@@ -193,15 +201,15 @@ function addButton(req,res)
 
 }
 
-// function getButtons(req, res)
-// {
-// 	database.getButtons(req.body.dashboarduuid, function(err, buttons){
-// 		if(!err)
-// 			res.status(200).send({status:"done",buttons:buttons});
-// 		else
-// 			res.status(200).send({status:"error"});
-// 	});
-// }
+function getButtons(req, res)
+{
+	database.getButtons(req.body.dashboarduuid, function(err, buttons){
+		if(!err)
+			res.status(200).send({status:"done",buttons:buttons});
+		else
+			res.status(200).send({status:"error"});
+	});
+}
 
 function updateButton(req, res)
 {
@@ -213,13 +221,38 @@ function updateButton(req, res)
 	});
 }
 
+function login(req, res)
+{
+	var pass = req.body.pass;
+	console.log(pass);
+	console.log(config);
+	console.log(config.loginPassword);
+	if (pass == config.loginPassword)
+		req.session.login=true;
+	res.status(200).send({status:"done"});
+}
+
 module.exports=function(app)
 {
+	app.use(function(req, res, next) {
+		var sess = req.session;
+		var signalPrefix = "/signal";
+		if((req.url === '/login')||(req.url.indexOf(signalPrefix) > -1))
+		{
+			next();
+		}
+		else if(sess.login)
+			next();
+		else
+			res.redirect('/login');	  
+	});
+	app.get('/login',loadLogin);
 	app.post("/add_button",addButton);
 	app.post("/add_dashboard", addDashboard);
 	//app.post("/add_signal", addSignal);
 	app.post("/add_graph",addGraph);
-	//app.post("/get_buttons",getButtons);
+	app.post("/signal/get_buttons",getButtons);
+	app.post("/add_signal_value", addSignalValue);
 	app.post("/get_dashboards",getDasboards);
 	app.post("/get_dashboard", getDashboard);
 	app.post("/get_dash_graph_button", getGraphs);
@@ -227,10 +260,10 @@ module.exports=function(app)
 	app.post("/get_signal_values_interval",getSignalValuesInterval);
 	app.post("/delete_dashboard", deleteDashboard);	
 	app.post("/remove_signal", removeSignal);
-	app.post("/add_signal_value", addSignalValue);
 	app.post("/get_latest_signal", getLatestSignal);
-	app.post("/get_signal_value", getSignalValue);
+	app.post("/signal/get_signal_value", getSignalValue);
 	app.get("/dashboards", loadDashboards);
 	app.get("/dashboard/:id",listDashboardData);
 	app.post("/update_button",updateButton);
+	app.post("/login",login);
 }
