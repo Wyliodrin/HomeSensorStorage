@@ -41,6 +41,7 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 	myDashboard.find(".dash_name").text(name).attr("href", url);
 	for(var i=0; i<graphType.length; i++)
 	{
+		console.log (graphType[i]);
 		var g = graphType[i];
 	 	var graphPrev = $(".graph_preview").clone();
 		graphPrev.removeClass("template graph_preview");
@@ -62,12 +63,12 @@ function getGraphs(dashboard)
 		{
 			var graphs = response.graphs;
 			var buttons = response.buttons;
-			console.log(buttons);
 			var graphsPreview = [];
 			var i=0;
-			while ((i<graphs.length) && (graphsPreview<4))
+			while ((i<graphs.length) && (graphsPreview.length<4))
 			{
 				graphsPreview.push(graphs[i]);
+				i++;
 			}
 			addDashboard(dashboard.name, dashboardid, buttons, graphs, graphsPreview);
 		}

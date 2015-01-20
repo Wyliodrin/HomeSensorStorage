@@ -130,8 +130,10 @@ function getSignals(req, res)
 
 function addSignalValue(req, res)
 {
+	console.log(req.body);
 	var body = req.body;
 	database.addSignalValue(body.timestamp, body.value, body.name, body.dashboarduuid, function(err){
+		console.log(err);
 		if(!err)
 			res.status(200).send({status:"done"});
 		else
@@ -247,7 +249,7 @@ module.exports=function(app)
 	app.use(function(req, res, next) {
 		var sess = req.session;
 		var signalPrefix = "/signal";
-		if((req.url === '/login')||(req.url.indexOf(signalPrefix) > -1))
+		if((req.url === '/login')||(req.url.indexOf(signalPrefix) == 0))
 		{
 			next();
 		}

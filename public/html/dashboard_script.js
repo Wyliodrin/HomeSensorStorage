@@ -1,5 +1,6 @@
 function addMyLine(graph, signals, latestValueContainer, container)
 {
+    console.log(signals);
     var signal = signals[0].id;
     console.log(signal);
     var vals = [];
@@ -272,8 +273,9 @@ $(document).ready(function()
                     function(response, textStatus){
                         if(response.status == "done")
                         {
+                           console.log(response.signalid);
                             var sensor = {id:response.graphid, name:name, type:graphType, unit:unit, description:description, dashboard:dashboardid};
-                            addGraph(sensor,[[]]);
+                            addGraph(sensor,[[{id:response.signalid}]]);
                             sensors.push(sensor);
                             $("#sensor_count").text(sensors.length);
                         }

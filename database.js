@@ -81,10 +81,10 @@ function addSignalToGraph(signalid, graphid, callbackFunction)
 {
 	var query = "insert into ?? (signalid, graphid) values (?, ?)";
 	query = mysql.format(query,[correspondenceTable,signalid,graphid]);
-	connection.query(query, function(err, rows){
+	connection.query(query, function(err, result){
 		if(err)
 			console.log("Could not add value to table "+correspondenceTable+" "+err);
-		callbackFunction(err);
+		callbackFunction(err, result.insertId);
 	});
 }
 
