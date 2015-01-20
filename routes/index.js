@@ -18,7 +18,6 @@ function getDashboard(req, res)
 		if(!err)
 		{
 			res.status(200).send(dashboard);
-			console.log(dashboard);
 		}
 		else
 			res.status(500).send([]);
@@ -42,7 +41,6 @@ function addDashboard(req, res)
 	var name = req.body.name;
 	var description = req.body.description;
 	database.addDashboard(name, description, function(err, insertId){
-		console.log(err);
 		if(err)
 			res.status(200).send({"status":"error"});
 		else
@@ -68,7 +66,6 @@ function getGraphs(req, res)
 		if(!err)
 		{
 			database.getButtons(req.body.dashboarduuid, function(err, buttons){
-				console.log(buttons);
 				if(!err)
 					res.status(200).send({status:"done",buttons:buttons, graphs:graphs});
 				else
@@ -88,7 +85,6 @@ function addGraph(req, res)
 			res.status(200).send({status:"error"});
 		else
 		{
-			console.log("add signal");
 			database.addSignal(body.signalName, body.dashboarduuid, graphid, function(err, signalid){
 				if(!err)
 					res.status(200).send({status:"done", signalid:signalid, graphid:graphid});
@@ -130,10 +126,8 @@ function getSignals(req, res)
 
 function addSignalValue(req, res)
 {
-	console.log(req.body);
 	var body = req.body;
 	database.addSignalValue(body.timestamp, body.value, body.name, body.dashboarduuid, function(err){
-		console.log(err);
 		if(!err)
 			res.status(200).send({status:"done"});
 		else
@@ -164,13 +158,11 @@ function getSignalValue(req, res)
 
 function loadDashboards(req, res)
 {
-	console.log("load dashboards");
     res.sendFile(path.join(html_dir, 'index.html'));
 }
 
 function loadLogin(req, res)
 {
-	console.log("load login");
 	res.sendFile(path.join(html_dir, 'login.html'));
 }
 
@@ -182,8 +174,6 @@ function listDashboardData(req, res)
 function getSignalValuesInterval(req,res)
 {
 	database.getSignalValueInInterval(req.body.id, req.body.min, req.body.max, function(err,values){
-		console.log(err);
-		console.log (values);
 		if(!err)
 			res.status(200).send(values);
 		else
@@ -193,7 +183,6 @@ function getSignalValuesInterval(req,res)
 
 function addButton(req,res)
 {
-	console.log("add button");
 	database.addButton(req.body.dashboarduuid, req.body.type, req.body.name, req.body.value, function(err, id){
 		if(!err)
 			res.status(200).send({status:"done", id:id});
@@ -226,9 +215,6 @@ function updateButton(req, res)
 function login(req, res)
 {
 	var pass = req.body.pass;
-	console.log(pass);
-	console.log(config);
-	console.log(config.loginPassword);
 	if (pass == config.loginPassword)
 		req.session.login=true;
 	res.status(200).send({status:"done"});
