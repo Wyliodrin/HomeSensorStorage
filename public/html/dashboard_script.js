@@ -4,11 +4,7 @@ function addMyLine(graph, signals, latestValueContainer, container)
     var vals = [];
     container.highcharts('StockChart',
     {
-        subtitle: {text: graph.description},    
-        yAxis:{
-                    min: -10,
-                    max: 100
-               },
+        subtitle: {text: graph.description},  
         series: [{data:[]}]
     }, 
 
@@ -49,10 +45,6 @@ function addStepLine(graph, signals, latestValueContainer, container)
     container.highcharts('StockChart',
     {
         subtitle: {text: graph.description},    
-        yAxis:{
-                    min: -10,
-                    max: 100
-               },
         series: [{data:[], step:true}]
     }, 
 
