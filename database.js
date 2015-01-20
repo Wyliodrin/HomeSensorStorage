@@ -486,6 +486,16 @@ function updateButton(id,value,callbackFunction)
 	});
 }
 
+function getButton(dashboarduuid, name, callbackFunction)
+{
+	var query = "select value from ?? where name=? and dashboarduuid=?";	
+	query = mysql.format(query, [buttonTable,name,dashboarduuid]);
+	console.log(query); 
+	connection.query(query, function(err, result){
+		callbackFunction(err, result[0]);
+	});
+}
+
 exports.addButton = addButton;
 exports.getButtons = getButtons;
 exports.getButtonValue = getButtonValue;

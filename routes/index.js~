@@ -232,16 +232,6 @@ function login(req, res)
 	res.status(200).send({status:"done"});
 }
 
-function getButton(req,res)
-{
-	database.getButton(req.body.dashboarduuid, req.body.name,function(err, value){
-		if(!err)
-			res.status(200).send({status:"done", value:value.value});
-		else
-			res.status(200).send({status:"error"});
-	});
-}
-
 module.exports=function(app)
 {
 	app.use(function(req, res, next) {
@@ -261,9 +251,8 @@ module.exports=function(app)
 	app.post("/add_dashboard", addDashboard);
 	//app.post("/add_signal", addSignal);
 	app.post("/add_graph",addGraph);
-	//app.post("/signal/get_buttons",getButtons);
-	app.post("/signal/get_button", getButton);
-	app.post("/signal/add_signal_value", addSignalValue);
+	app.post("/signal/get_buttons",getButtons);
+	app.post("/add_signal_value", addSignalValue);
 	app.post("/get_dashboards",getDasboards);
 	app.post("/get_dashboard", getDashboard);
 	app.post("/get_dash_graph_button", getGraphs);
@@ -272,7 +261,7 @@ module.exports=function(app)
 	app.post("/delete_dashboard", deleteDashboard);	
 	app.post("/remove_signal", removeSignal);
 	app.post("/get_latest_signal", getLatestSignal);
-	app.post("/get_signal_value", getSignalValue);
+	app.post("/signal/get_signal_value", getSignalValue);
 	app.get("/dashboards", loadDashboards);
 	app.get("/dashboard/:id",listDashboardData);
 	app.post("/update_button",updateButton);

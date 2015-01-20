@@ -362,7 +362,7 @@ function getLatestValues(signalid,lastValue, callbackFunction)
 
 function getValues(signalid,callbackFunction)
 {
-    $.post("/signal/get_signal_value",{id:signalid},function(val,textStatus){
+    $.post("/get_signal_value",{id:signalid},function(val,textStatus){
         callbackFunction(val);
     });
 }
