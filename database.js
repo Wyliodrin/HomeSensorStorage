@@ -79,19 +79,14 @@ function addGraph(name, description, unit, type,dashboard, callbackFunction)
 
 function addSignalToGraph(signalid, graphid, callbackFunction)
 {
-	console.log(signalid);
 	var query = "insert into ?? (signalid, graphid) values (?, ?)";
 	query = mysql.format(query,[correspondenceTable,signalid,graphid]);
-	console.log(query);
 	connection.query(query, function(err, result){
-		console.log(result);
 		if(err)
 			console.log("Could not add value to table "+correspondenceTable+" "+err);
 		callbackFunction(err, signalid);
 	});
 }
-
-// addSignalToGraph(2,3,function(){});
 
 
 function addSignal(name, dashboarduuid, graphid, callbackFunction)
@@ -441,7 +436,6 @@ function getSignalValueInInterval(signalid, min, max, callbackFunction)
 	else
 	{
 		query = "select value, UNIX_TIMESTAMP(ts) as ts from ?? where UNIX_TIMESTAMP(ts) > ?";
-		console.log (query);
 		query = mysql.format(query,[signalValueTable, min]);
 	}
 	connection.query(query, function(err, rows){
@@ -462,7 +456,6 @@ function getButtons(dashboarduuid, callbackFunction)
 {
 	var query = "select * from ?? where dashboarduuid=?";
 	query = mysql.format(query,[buttonTable,dashboarduuid]);
-	console.log(query);
 	connection.query(query, function(err,buttons){
 		callbackFunction(err, buttons);
 	});
@@ -493,7 +486,6 @@ function getButton(dashboarduuid, name, callbackFunction)
 {
 	var query = "select value from ?? where name=? and dashboarduuid=?";	
 	query = mysql.format(query, [buttonTable,name,dashboarduuid]);
-	console.log(query); 
 	connection.query(query, function(err, result){
 		callbackFunction(err, result[0]);
 	});
@@ -516,3 +508,4 @@ exports.addSignalValue = addSignalValue;
 exports.getLatestSignalValue = getLatestSignalValue;
 exports.getSignalValueInInterval = getSignalValueInInterval;
 exports.updateButton = updateButton;
+exports.getButton = getButton;

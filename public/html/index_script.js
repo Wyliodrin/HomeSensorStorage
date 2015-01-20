@@ -31,7 +31,6 @@ $(document).ready(function()
 
 function addDashboard(name, dashboardid, buttons, sensors, graphType)
 {
-	console.log("add dashboard "+dashboardid);
 	var myDashboard = $(".my_dashboard").clone();
 	myDashboard.removeClass("template my_dashboard");
 	myDashboard.find(".sensors_count").append(sensors.length);
@@ -41,7 +40,6 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 	myDashboard.find(".dash_name").text(name).attr("href", url);
 	for(var i=0; i<graphType.length; i++)
 	{
-		console.log (graphType[i]);
 		var g = graphType[i];
 	 	var graphPrev = $(".graph_preview").clone();
 		graphPrev.removeClass("template graph_preview");

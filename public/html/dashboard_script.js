@@ -1,8 +1,6 @@
 function addMyLine(graph, signals, latestValueContainer, container)
 {
-    console.log(signals);
     var signal = signals[0].id;
-    console.log(signal);
     var vals = [];
     container.highcharts('StockChart',
     {
@@ -228,11 +226,9 @@ $(document).ready(function()
         $("#ok_add_button").click(function(){
             $(".add_button").foundation("reveal", "close");
             var name = $("#add_button_name").val();
-            console.log(name);
             if(name.length > 0)
             {   
                 var type = $("input:radio[name=btntype]:checked").val();
-                console.log("type = "+type);
                 var description = $("#add_button_description").val();
                 $.post("/add_button",{dashboarduuid:dash.uuid,type:type,name:name,value:0},function(result, textStatus){
                     if(result.status == "done")
@@ -293,7 +289,6 @@ function addButton(b)
         var myButton = $(".button_slide").clone();
         myButton.removeClass("template button_slide");
         myButton.foundation('slider', 'set_value', b.value);
-        console.log("set value");
         $("#button_area").append(myButton);
         myButton.find(".button_name").text(b.name);
         myButton.find(".slider_id").attr("id","sliderOutput"+b.id);
