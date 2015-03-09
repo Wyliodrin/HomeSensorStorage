@@ -16,9 +16,34 @@ $(document).ready(function()
 		}
 	});
 
+    $("#ok_rename_dashboard").click(function(){
+        $(".rename_dashboard").foundation("reveal","close");
+        var id=$("#rename_dashboard_id").val();
+        var name = $("#rename_dashboard_name").val();
+        if(name.length > 0)
+        {
+            $.post("/rename_dashboard",{id:id, name:name}, function(response, textStatus){
+                if(response.status == "done")
+                {
+                    var dashboards=$(".dashboard-item");
+                    for(var index=0;index<dashboards.length;index++)
+                        if($(dashboards[index]).find(".dashboard_id").val()==id) {
+                            $(dashboards[index]).find(".dash_name").html(name);
+                            break;
+                        }
+                }
+            });
+        }
+    });
+
 	$("#cancel_add_dashboard").click(function(){
 		$(".add_dashboard").foundation("reveal", "close");
 	});
+
+    $("#cancel_rename_dashboard").click(function(){
+        $(".rename_dashboard").foundation("reveal", "close");
+    });
+
 
    $.post("/get_dashboards",function(dash, textStatus){
     	for(var i=0; i<dash.length; i++)
@@ -26,7 +51,8 @@ $(document).ready(function()
     		var d = dash[i];
     		getGraphs(d);
     	}
-    }); 
+    });
+
 });
 
 function addDashboard(name, dashboardid, buttons, sensors, graphType)
@@ -46,7 +72,31 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 		graphPrev.find(".graph_preview_name").text(g.name);
 		graphPrev.find(".graph_preview_image").attr("src","/html/img/"+g.type+".png");
 		myDashboard.find(".graph_prev").append(graphPrev);
-	}	
+	}
+
+
+
+    //mod victor
+    myDashboard.find(".delete_dashboard_button").click({id:dashboardid},function(evt) {
+        dashboardid=evt.data.id;
+        $.post("/delete_dashboard",{id:dashboardid}, function(response, textStatus){
+            if(response.status == "done")
+            {
+                myDashboard.remove();
+            }
+        });
+    });
+
+    myDashboard.find(".rename_dashboard_button").click({name:name,id:dashboardid},function(evt) {
+        var id=evt.data.id;
+        var name=evt.data.name;
+        $(".rename_dashboard").foundation("reveal", "open");
+        $("#rename_dashboard_name").val(name);
+        $("#rename_dashboard_id").val(id);
+    });
+
+    myDashboard.find(".dashboard_id").val(dashboardid);
+    //
 
 	$("#dashboard_list").append(myDashboard);
 	$("#dashboard_list").append("<hr/>");

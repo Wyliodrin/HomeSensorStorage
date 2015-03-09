@@ -13,8 +13,6 @@
     <script type="text/javascript" src="/html/index_script.js"></script>
   </head>
   <body>
- 
- 
 <div class="off-canvas-wrap" data-offcanvas>
   <div class="inner-wrap">
 
@@ -121,8 +119,8 @@
                     <div class="large-4 medium-4 small-4 columns text-right">
                       <a href="#" data-options="align:bottom" data-dropdown="drop" class="d-settings"><i class="fi-widget size-18 blk"></i></a>
             <ul id="drop" class="medium f-dropdown text-left" data-dropdown-content>
-              <li><a href="#">Rename</a></li>
-              <li><a href="#">Delete</a></li>
+              <li><a href="#" class="rename_dashboard_button">Rename</a></li>
+              <li><a href="#" class="delete_dashboard_button">Delete</a></li>
           </ul>
                     </div>
                 <div class="row">
@@ -141,6 +139,7 @@
               </ul>
               
             </div>
+                <input type="hidden" class="dashboard_id"/>
             </div>
           </div>
         </div>
@@ -174,6 +173,38 @@
 </form>
 
   <a class="close-reveal-modal">&#215;</a>
+</div>
+
+<div id="RenameDashboardModal" class="reveal-modal large rename_dashboard" data-reveal="" style="visibility: hidden; display: block; top: 100px; opacity: 1;">
+    <h2>Rename dashboard</h2>
+    <form>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Dashboard name
+                    <input type="text" id="rename_dashboard_name"/>
+                </label>
+            </div>
+        </div>
+        <!--<div class="row">
+            <div class="large-12 columns">
+                <label>Dashboard description
+                    <textarea id="rename_dashboard_description"></textarea>
+                </label>
+            </div>
+        </div>-->
+
+        <div class="row">
+            <div class="large-6 medium-6 small-6 columns text-right">
+                <a href="#" class="button success large radius" id="ok_rename_dashboard">Ok</a>
+            </div>
+            <div class="large-6 medium-6 small-6 columns text-left">
+                <a href="#" class="button alert large radius" id="cancel_rename_dashboard">Cancel</a>
+            </div>
+        </div>
+        <input type="hidden" id="rename_dashboard_id"/>
+    </form>
+
+    <a class="close-reveal-modal">&#215;</a>
 </div>
 
  <li class="text-center graph_preview template">

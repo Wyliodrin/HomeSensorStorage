@@ -188,7 +188,7 @@
   <div class="row">
     <div class="large-6 columns">
       <label>Measuring unit
-        <select id="select_unit">
+        <select id="add_sensor_unit">
           <option value="Cm">Cm</option>
           <option value="Km">Km/h</option>
           <option value="Celsius">Celsius</option>
@@ -198,15 +198,15 @@
     </div>
     <div class="large-6 columns">
       <label>Graph type
-        <select id="select_graph_type">
+        <select id="add_sensor_graph">
           <option value="line">Line</option>
           <option value="stepline">Stepline</option>
           <option value="speedometer">Speedometer</option>
-         <!-- <option value="plineline">Plineline</option>
+          <option value="plineline">Plineline</option>
           <option value="point marker">Point marker</option>
           <option value="thermometer">thermometer</option>
           <option value="solid gauge">solid gauge</option>
-          <option value="vumeter">vumeter</option>-->
+          <option value="vumeter">vumeter</option>
         </select>
       </label>
     </div>
@@ -307,7 +307,7 @@
 <ul id="drop" class="f-dropdown text-left" data-dropdown-content>
   <li><a href="#">Rename</a></li>
             <li><a href="#">Edit</a></li>
-  <li><a href="#">Delete</a></li>
+            <li><a href="#" class="delete_chart_button">Delete</a></li>
 </ul>
         </div>
         </div>
@@ -315,7 +315,6 @@
     </div>
   <div class="large-2 columns text-center w-value"><span class="text-right l-value">Latest value</span><div class="rounded-widget latest_value"></div></div>
 </div>
-    
    <script>
       $(document).foundation();
     </script> 

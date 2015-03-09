@@ -225,7 +225,7 @@ function clearSignalValueTables(callbackFunction)
 
 function deleteDashboard(dashboardId, callbackFunction)
 {
-	var signalsTable = config.prefix+mysql.escape(dashboardId);
+	//var signalsTable = config.prefix+mysql.escape(dashboardId);
 	var query = "delete from "+dashboardTable+" where id = "+mysql.escape(dashboardId)+";";
 	var tables = "";
 	connection.query(query, function(err, rows){
@@ -238,6 +238,36 @@ function deleteDashboard(dashboardId, callbackFunction)
 			});
 		}
 	});
+}
+
+function deleteGraph(graphId, callbackFunction){
+    var query="delete from "+graphTable+" where id=" +mysql.escape(graphId)+";";
+    connection.query(query, function(err, rows){
+        if(err)
+            console.log("Could not delete graph "+dashboardTable+' '+err);
+        else
+        {
+            clearSignalValueTables(function(err){
+                callbackFunction(err);
+            });
+        }
+    });
+}
+
+function renameDashboard(dashboardId, name, callbackFunction){
+    var signalsTable = config.prefix+mysql.escape(dashboardId);
+    var query = "update "+dashboardTable+" set name="+mysql.escape(name)+" where id = "+mysql.escape(dashboardId)+";";
+    var tables = "";
+    connection.query(query, function(err, rows){
+        if(err)
+            console.log("Could not rename table "+dashboardTable+' '+err);
+        else
+        {
+            clearSignalValueTables(function(err){
+                callbackFunction(err);
+            });
+        }
+    });
 }
 
 function deleteGraphFromDashboard(graphId, dashboardId, callbackFunction)
@@ -335,10 +365,10 @@ function getDashboardSignals(dashboardid, callbackFunction)
 	});
 }
 
-function getGraphSignals(graphid, callbackFunction)
+function getGraphSignals(graphId, callbackFunction)
 {
 	var query = "select * from ?? where graphid = ?";
-	query = mysql.format(query,[correspondenceTable, graphid]);
+	query = mysql.format(query,[correspondenceTable, graphId]);
 	connection.query(query, function(err,rows){
 		if(!err)
 		{
@@ -365,6 +395,39 @@ function getGraphSignals(graphid, callbackFunction)
 			callbackFunction(err);
 		}
 	});
+}
+//gets all the data for every graph of a dashboard
+function getGraphSignalsForDashBoard(dashboardId, datetime, callbackFunction){
+    var query="SELECT * FROM "+graphTable+" WHERE dashboard="+dashboardId;
+    connection.query(query,function(err,rows){
+        if(err) {
+            console.log("Could not retrieve data from table " + graphTable + " " + err);
+            callbackFunction(err);
+        }
+        if(rows.length==0)
+            callbackFunction(err,[]);
+
+        //get graph ids for query
+        var graphIds="";
+        for(var index=0;index<rows.length;index++)
+            graphIds += rows[index].id+",";
+        graphIds=graphIds.substr(0,graphIds.length-1);
+
+        //get all graph signals
+        query="SELECT * FROM "+correspondenceTable+" WHERE graphid IN("+graphIds+")";
+        connection.query(query,function (serr, rows) {
+            if(serr){
+                callbackFunction(serr);
+            }
+            if(rows.length==0)
+                callbackFunction(serr,[]);
+
+            for(var index=0;index<rows.length;index++){
+                query="SELECT * FROM ";
+                console.log(rows[index]);
+            }
+        });
+    });
 }
 
 function getSignalValues(signalid, callbackFunction)
@@ -509,3 +572,9 @@ exports.getLatestSignalValue = getLatestSignalValue;
 exports.getSignalValueInInterval = getSignalValueInInterval;
 exports.updateButton = updateButton;
 exports.getButton = getButton;
+
+//mod victor
+exports.renameDashboard= renameDashboard;
+exports.deleteGraph=deleteGraph;
+
+exports.getGraphSignalsForDashBoard=getGraphSignalsForDashBoard;
