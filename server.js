@@ -10,6 +10,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use("/html",express.static(path.join(__dirname, 'public/html')));
 require('./routes/index')(app);
+
 var server=app.listen(3000,function(){
-console.log("We have started our server on port 3000");
+    console.log("We have started our server on port 3000");
 });

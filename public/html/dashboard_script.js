@@ -1,78 +1,81 @@
-function addMyLine(graph, signals, latestValueContainer, container) {
-    var signalId = signals[0].id;
-    var vals = [];
-
-    container.highcharts('StockChart',
-        {
-            chart:{type:graph.type},
-            title:{text:'test'},
-            //subtitle: {text: graph.description},
-            series: [{data: [1,2,3,4,5]}]
-        },
-
-        function (chart) {
-            /*var refresh = function () {
-                if (vals.length > 0)
-                    getLatestValues(signalId, vals[vals.length - 1].ts, function (v) {
-                        for (var i = 0; i < v.length; i++) {
-                            vals.push(v[i]);
-                            chart.series[0].addPoint([v[i].ts, v[i].value], true);
-                        }
-                        if (v.length > 0)
-                            latestValueContainer.text(v[v.length - 1].value + " " + graph.unit);
-                        setTimeout(refresh, 1000);
-                    });
-                else
-                    getValues(signalId, function (v) {
-                        for (var i = 0; i < v.length; i++) {
-                            vals.push(v[i]);
-                            chart.series[0].addPoint([v[i].ts, v[i].value], true);
-                        }
-                        if (v.length > 0)
-                            latestValueContainer.text(v[v.length - 1].value + " " + graph.unit);
-                        setTimeout(refresh, 1000);
-                    });
-            };
-
-            refresh();*/
-        });
+function createSeries(signals,graphType){
+    var series=new Array();
+    for(var index=0;index<signals.length;index++){
+        if(graphType=='line')
+            series.push({
+                name: signals[index].signalName,
+                shadow: true,
+                tooptip: {
+                    valueDecimals: 2
+                },
+                data: [1,5,2,3,4,5,5]
+            });
+        else if(graphType=='stepline')
+            series.push({
+                name: signals[index].signalName,
+                shadow: true,
+                tooptip: {
+                    valueDecimals: 2
+                },
+                step: true,
+                data: [1,5,2,3,4,5,5]
+            });
+        else if(graphType=='spline')
+            series.push({
+                name: signals[index].signalName,
+                shadow: true,
+                tooptip: {
+                    valueDecimals: 2
+                },
+                type:'spline',
+                data: [1,5,2,3,4,5,5]
+            });
+        else if(graphType=='point'){
+            series.push({
+                name: signals[index].signalName,
+                shadow: true,
+                tooptip: {
+                    valueDecimals: 2
+                },
+                lineWidth: 0,
+                marker : {
+                    enabled : true,
+                    radius : 2
+                },
+                data: [1,5,2,3,4,5,3]
+            });
+        }
+    }
+    return series;
 }
 
-function addStepLine(graph, signals, latestValueContainer, container) {
-    var signal = signals[0].id;
-    var vals = [];
+function addLine(graph,container,lastValueContainer){
+    /*var series=createSeriesAux(graph.graphSignals);
+    lastValueContainer.text("a");
+    containter.highcharts({
+        chart: {type:'line'},
+        step: true,
+        //title: {text: graph.graphName},
+        series: series
+    })*/
+
+    var series=createSeries(graph.graphSignals,graph.graphType);
+
     container.highcharts('StockChart',
         {
-            subtitle: {text: graph.description},
-            series: [{data: [], step: true}]
-        },
+            rangeSelector: {
+                selected: 1
+            },
 
-        function (chart) {
-            var refresh = function () {
-                if (vals.length > 0)
-                    getLatestValues(signal, vals[vals.length - 1].ts, function (v) {
-                        for (var i = 0; i < v.length; i++) {
-                            vals.push(v[i]);
-                            chart.series[0].addPoint([v[i].ts, v[i].value], true);
-                        }
-                        if (v.length > 0)
-                            latestValueContainer.text(v[v.length - 1].value + " " + graph.unit);
-                        setTimeout(refresh, 1000);
-                    });
-                else
-                    getValues(signal, function (v) {
-                        for (var i = 0; i < v.length; i++) {
-                            vals.push(v[i]);
-                            chart.series[0].addPoint([v[i].ts, v[i].value], true);
-                        }
-                        if (v.length > 0)
-                            latestValueContainer.text(v[v.length - 1].value + " " + graph.unit);
-                        setTimeout(refresh, 1000);
-                    });
-            };
+            title: {
+                text: 'AAPL Stock Price'
+            },
 
-            refresh();
-        });
+            series: series
+        }
+    );
+
+    lastValueContainer.text(series[0].data[series[0].data.length-1]);
 }
 
 function addSpeedometer(graph, signals, latestValueContainer, container) {
@@ -157,7 +160,7 @@ function addSpeedometer(graph, signals, latestValueContainer, container) {
 
         },
         function (chart) {
-            var refresh = function () {
+           /* var refresh = function () {
                 if (vals.length > 0)
                     getLatestValues(signal, vals[vals.length - 1].ts, function (v) {
                         for (var i = 0; i < v.length; i++) {
@@ -186,14 +189,14 @@ function addSpeedometer(graph, signals, latestValueContainer, container) {
                     });
             };
 
-            refresh();
+            refresh();*/
         });
 
 }
 
 $(document).ready(function () {
     var url = window.location.pathname;
-    var dashboardid = url.substring("/dashboard/".length);
+    var dashboardId = url.substring("/dashboard/".length);
 
     $("#cancel_add_sensor").click(function () {
         $(".add_sensor").foundation("reveal", "close");
@@ -203,200 +206,273 @@ $(document).ready(function () {
         $(".add_button").foundation("reveal", "close");
     });
 
-    $.post("/get_dashboard", {id: dashboardid}, function (dash, textStatus) {
-        $("#my_dashboard_name").text(dash.name);
-        $("#key").text(dash.uuid);
-        $("#dashboard_description").text(dash.description);
+    //rename dashboard popup
+    $(".rename_dashboard_button").click(function () {
+        var dashboardId=url.substring("/dashboard/".length);
+        var dashboardName=$("#my_dashboard_name").html();
+        $(".rename_dashboard").foundation("reveal", "open");
+        $("#rename_dashboard_name").val(dashboardName);
+        $("#rename_dashboard_id").val(dashboardId);
+    });
 
-        $("#ok_add_button").click(function () {
-            $(".add_button").foundation("reveal", "close");
-            var name = $("#add_button_name").val();
-            if (name.length > 0) {
-                var type = $("input:radio[name=btntype]:checked").val();
-                var description = $("#add_button_description").val();
-                $.post("/add_button", {
-                    dashboarduuid: dash.uuid,
-                    type: type,
-                    name: name,
-                    value: 0
-                }, function (result, textStatus) {
-                    if (result.status == "done")
-                        addButton({dashboarduuid: dash.uuid, type: type, name: name, value: 0, id: status.id});
-                });
-            }
-        });
-
-        /*$.post("/get_dashboard_signals",{dashboardId:dashboardid},function(){
-
-         });*/
-
-        $("#ok_add_sensor").click(function () {
-            $(".add_sensor").foundation("reveal", "close");
-            var sensorName = $("#add_sensor_name").val();
-            var signalName = $("#add_signal_name").val();
-
-            if (sensorName.length == 0 || signalName.length == 0) {
-                alert("Sensor name or signal name cannot be empp");
-                return;
-            }
-
-            var sensorDescription = $("#add_sensor_description").val();
-            var sensorUnit = $("#add_sensor_unit").val();
-            var sensorGraphType = $("#add_sensor_graph").val();
-
-            $.post("/add_sensor",
+    //rename the dashboard
+    $("#ok_rename_dashboard").click(function(){
+        $(".rename_dashboard").foundation("reveal","close");
+        var id=$("#rename_dashboard_id").val();
+        var name = $("#rename_dashboard_name").val();
+        if(name.length > 0)
+        {
+            $.post("/rename_dashboard",{id:id, name:name}, function(response, textStatus){
+                if(response.status == "done")
                 {
-                    sensorName: sensorName,
-                    signalName: signalName,
-                    sensorDescription: sensorDescription,
-                    sensorUnit: sensorUnit,
-                    sensorGraph: sensorGraphType,
-                    dashboardId: dashboardid,
-                    dashboardUuid: dash.uuid
-                },
-                function (response, textStatus) {
-                    if (response.status != "done") {
-                        alert("a");
-                        return;
-                    }
-
-                    var sensor = {
-                        sensorId: graphId,
-                        sensorName: sensorName,
-                        sensorDescription: sensorDescription,
-                        sensorGraph: sensorGraphType,
-                        sensorUnit: sensorUnit,
-                        dashboardId: dashboardid
-                    };
-                    addSensorGraph(sensor, [{id: response.signalId}]);
-                    sensors.push(sensor);
-                    $("#sensor_count").text(sensors.length);
+                    var dashboards=$(".dashboard-item");
+                    $("#my_dashboard_name").html(name);
                 }
-            );
+            });
+        }
+    });
 
+    //cancel dashboard renamal
+    $("#cancel_rename_dashboard").click(function(){
+        $(".rename_dashboard").foundation("reveal", "close");
+    });
+
+    //delete dashboard
+    /*$('.delete_dashboard_button').click(function(){
+        var dashboardId=url.substring("/dashboard/".length);
+        $.post("/delete_dashboard",{id:dashboardId}, function(response, textStatus){
+            if(response.status == "done")
+            {
+                window.location="/dashboards";
+            }
         });
 
-        $.post("/get_dash_graph_button", {
-            dashboardid: dash.id,
-            dashboarduuid: dash.uuid
+    });*/
+
+    //to do: rename to ok_add_graph
+    $("#ok_add_sensor").click(function () {
+        var graphName = $("#add_sensor_name").val();
+        var signalName = $("#add_signal_name").val();
+        var graphDescription = $("#add_sensor_description").val();
+        var graphUnit = $("#add_sensor_unit").val();
+        var graphType = $("#add_sensor_graph").val();
+        var dashboardUuid = $("#key").html();
+
+        if (graphName.length == 0 || signalName.length == 0) {
+            alert("Sensor name or signal name cannot be empty");
+            return;
+        }
+
+        //if the input is correct close the dialog
+        $(".add_sensor").foundation("reveal", "close");
+
+        $.post("/add_graph",
+            {
+                graphName: graphName,
+                signalName: signalName,
+                graphDescription: graphDescription,
+                graphUnit: graphUnit,
+                graphType: graphType,
+                dashboardId: dashboardId,
+                dashboardUuid: dashboardUuid
+            },
+            function (response, textStatus) {
+                if (response.status != "done") {
+                    alert(textStatus);
+                    return;
+                }
+
+                var graph = {
+                    graphId: response.graphId,
+                    graphName: graphName,
+                    graphDescription: graphDescription,
+                    graphType: graphType,
+                    graphUnit: graphUnit,
+                    dashboardId: dashboardId
+                };
+                addGraph(graph, [{singalId: response.signalId}]);
+                //sensors.push(sensor);
+                //$("#sensor_count").text(sensors.length);
+            }
+        );
+
+    });
+    
+    $("#ok_add_button").click(function () {
+        var buttonName=$("#add_button_name").val();
+        var buttonDescription=$("#add_button_description").val();
+        var buttonType=$("input:radio[name=btntype]:checked").val();
+        var dashboardUUID = $("#key").html();
+
+        if (buttonName.length == 0 || buttonDescription.length == 0) {
+            alert("Button name or button description cannot be empty");
+            return;
+        }
+
+        //if the input is correct close the dialog
+        $(".add_button").foundation("reveal", "close");
+
+        $.post("/add_button",
+            {
+                buttonName:buttonName,
+                buttonDescription:buttonDescription,
+                buttonType:buttonType,
+                dashboardUUID:dashboardUUID
+            },
+            function(response, textStatus){
+                if (response.status != "done") {
+                    alert(textStatus);
+                    return;
+                }
+
+                var button={
+                    buttonId:response.buttonId,
+                    buttonName:buttonName,
+                    buttonDescription:buttonDescription,
+                    buttonType:buttonType,
+                    buttonValue:1,
+                    dashboardUUID:dashboardUUID
+                };
+                addButton(button);
+            }
+        );
+    });
+
+    $.post("/get_dashboard", {dashboardId: dashboardId}, function (dashboard, textStatus) {
+        $("#my_dashboard_name").text(dashboard.name);
+        $("#key").text(dashboard.uuid);
+        $("#dashboard_description").text(dashboard.description);
+
+        $.post("/get_dashboard_graphs_and_buttons", {
+            dashboardid: dashboard.id,
+            dashboarduuid: dashboard.uuid
         }, function (result, textStatus) {
             if (result.status == "done") {
-                var sensors = result.graphs;
+
+                var graphs = result.graphs;
                 var buttons = result.buttons;
-                $("#sensor_count").text(sensors.length);
+
+                $("#sensor_count").text(graphs.length);
                 $("#button_count").text(buttons.length);
                 $("#board_count").text("-");
+
                 for (var i = 0; i < buttons.length; i++) {
                     var b = buttons[i];
                     addButton(b);
                 }
-                for (var i = 0; i < sensors.length; i++) {
-                    var s = sensors[i];
-                    getGraphSignals(s);
+                for (var i = 0; i < graphs.length; i++) {
+                    var s = graphs[i];
+                    addGraph(graphs[i]);
                 }
-                /*$("#ok_add_sensor").click(function(){
-                 $(".add_sensor").foundation("reveal", "close");
-                 var name = $("#add_sensor_name").val();
-                 var signal = $("#add_signal_name").val();
-                 if((name.length > 0) && (signal.length > 0))
-                 {
-                 var description = $("#add_sensor_description").val();
-                 var unit = $('#select_unit').val();
-                 var graphType = $('#select_graph_type').val();
-                 $.post("/add_graph",
-                 {name:name, description:description, unit:unit, type:graphType, dashboardid:dashboardid, signalName:signal, dashboarduuid:dash.uuid},
-                 function(response, textStatus){
-                 if(response.status == "done")
-                 {
-                 var sensor = {id:response.graphid, name:name, type:graphType, unit:unit, description:description, dashboard:dashboardid};
-                 addSensorGraph(sensor,[{id:response.signalid}]);
-                 sensors.push(sensor);
-                 $("#sensor_count").text(sensors.length);
-                 }
-                 });
-                 }
-                 });*/
             }
         });
     });
+
+    $.post("/get_signals_values",{signalsIds:[21,22,23,24]},function(response){
+        if(response.status=="done"){
+            //var signalsValues=response.s
+        }
+    });
+
 });
 
-function addButton(b) {
-    if (b.type == "slider") {
-        var myButton = $(".button_slide").clone();
+function refresh(){
+
+}
+
+function addButton(button) {
+
+    var myButton;
+    if (button.buttonType == "slider") {
+        myButton = $(".button_slide").clone();
         myButton.removeClass("template button_slide");
-        myButton.foundation('slider', 'set_value', b.value);
+
+        myButton.foundation('slider', 'set_value', button.buttonValue);
+
+       // myButton.find(".slider_id").attr("id", "sliderOutput" + button.buttonId);
+       // myButton.find(".slider_options").attr("data-options", "display-selector:# sliderOutput" + button.id + ";");
+        /*myButton.on('change.fndtn.slider', function () {
+//
+        });*/
+    }
+    else if(button.buttonType == "switch") {
+        myButton = $(".button_check").clone();
+        myButton.removeClass("template button_check");
+
+
+    }
+    //setChecked.attr("id", button.id);
+    myButton.find(".button_name").text(button.buttonName);
+    $("#button_area").append(myButton);
+
+    /*if (button.type == "slider") {
+        = $(".button_slide").clone();
+        myButton.removeClass("template button_slide");
+        myButton.foundation('slider', 'set_value', button.value);
         $("#button_area").append(myButton);
-        myButton.find(".button_name").text(b.name);
-        myButton.find(".slider_id").attr("id", "sliderOutput" + b.id);
-        myButton.find(".slider_options").attr("data-options", "display-selector:# sliderOutput" + b.id + ";");
+        myButton.find(".button_name").text(button.name);
+        myButton.find(".slider_id").attr("id", "sliderOutput" + button.id);
+        myButton.find(".slider_options").attr("data-options", "display-selector:# sliderOutput" + button.id + ";");
         myButton.on('change.fndtn.slider', function () {
-            $.post("/update_button", {value: myButton.find(".range-slider").attr('data-slider'), id: b.id},
+            $.post("/update_button", {value: myButton.find(".range-slider").attr('data-slider'), id: button.id},
                 function (result, textStatus) {
                     //TODO-make efficient, less requests
                 });
         });
 
     }
-    else if (b.type == "switch") {
-        var value = b.value;
+    else if (button.type == "switch") {
+        var value = button.value;
         var myButton = $(".button_check").clone();
         var setChecked = myButton.find(".set_checked");
         myButton.removeClass("template button_check");
-        setChecked.attr("id", b.id);
-        myButton.find(".l_set_ckecked").attr("for", b.id);
-        if (b.value == 1)
+        setChecked.attr("id", button.id);
+        myButton.find(".l_set_ckecked").attr("for", button.id);
+        if (button.value == 1)
             setChecked.attr("checked", '');
         $("#button_area").append(myButton);
-        myButton.find(".button_name").text(b.name);
+        myButton.find(".button_name").text(button.name);
         setChecked.click(function () {
             value = 1 - value;
-            $.post("/update_button", {value: value, id: b.id},
+            $.post("/update_button", {value: value, id: button.id},
                 function (result, textStatus) {
                     //TODO-make efficient, less requests
                 });
         });
-    }
+    }*/
+
+    /*$('[data-slider]').on('change.fndtn.slider', function(event){
+        // do something when the value changes
+        alert(this);
+    });*/
 }
 
-function addSensorGraph(graph, signals) {
+function addGraph(graph) {
+    //create the sensor hdhml after the template
     var mySensor = $(".chart_template").clone();
+    //remove the template class
     mySensor.removeClass("template chart_template");
+    //set the sensor name
+    mySensor.find(".widget_name").text(graph.graphName);
+
+    //append the sensor html to the sensors area
     $("#sensor_area").append(mySensor);
 
-    //getLatestValue(s,mySensor.find(".latest_value"));
-    mySensor.find(".widget_name").text(graph.name);
-
-    if(signals.length==0)
-        return;
-
-    if (graph.type == "line")
-        addMyLine(graph, signals, mySensor.find(".latest_value"), mySensor.find(".chart"));
-    /*else if(graph.type == "stepline")
-     addStepLine(graph, signals, mySensor.find(".latest_value"), mySensor.find(".chart"));
-     else if(graph.type == "speedometer")
-     addSpeedometer(graph, signals, mySensor.find(".latest_value"), mySensor.find('.chart'));*/
-
-    //else if(graph.grph)
-
-    mySensor.find(".delete_chart_button").click({id: graph.id}, function (evt) {
-        var graph_id = evt.data.id;
-        $.post("/delete_graph", {id: graph_id}, function (response, textStatus) {
+    //add onclick action on the sensor
+    //@ to do : rename the delete button to delete_graph_button
+    mySensor.find(".delete_chart_button").click({graphId: graph.graphId}, function (evt) {
+        var graphId = evt.data.graphId;
+        $.post("/remove_graph", {graphId: graphId}, function (response, textStatus) {
             if (response.status == "done") {
                 mySensor.remove();
             }
         });
     });
 
-    //mySensor.find()
-}
-
-function getGraphSignals(graph) {
-    $.post("/get_graph_signals", {graphId: graph.id}, function (result, textStatus) {
-        if (result.status == "done") {
-            addSensorGraph(graph, result.signals);
-        }
-    });
+    if(graph.graphType=="line" || graph.graphType=="stepline" || graph.graphType=="spline" || graph.graphType=="point")
+        addLine(graph,mySensor.find(".chart"),mySensor.find(".latest_value"));
+    else if(graph.graphType == "speedometer")
+        addSpeedometer(graph, signals, mySensor.find(".latest_value"), mySensor.find('.chart'));
 }
 
 function getLatestValues(signalid, lastValue, callbackFunction) {

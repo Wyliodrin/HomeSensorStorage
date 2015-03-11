@@ -94,10 +94,10 @@
               		<h3><a href="#" data-reveal-id="AddDashboardModal2" class="button large radius">Add button</a></h3>
             	</div>
             	<div class="text-right large-3 medium-3 small-3 columns">
-              		<h3><a href="#" class="button large secondary radius"><i class="step fi-pencil size-18"></i></a></h3>
+              		<h3><a href="#" class="button large secondary radius rename_dashboard_button"><i class="step fi-pencil size-18"></i></a></h3>
             	</div>
             	<div class="text-right large-3 medium-3 small-3 columns">
-              		<h3><a href="#" class="button large alert radius"><i class="step fi-trash size-18"></i></a></h3>
+              		<h3><a href="#" class="button large alert radius delete_dashboard_button"><i class="step fi-trash size-18"></i></a></h3>
             	</div>
             </div>
           </div>
@@ -199,14 +199,17 @@
     <div class="large-6 columns">
       <label>Graph type
         <select id="add_sensor_graph">
-          <option value="line">Line</option>
-          <option value="stepline">Stepline</option>
-          <option value="speedometer">Speedometer</option>
-          <option value="plineline">Plineline</option>
-          <option value="point marker">Point marker</option>
-          <option value="thermometer">thermometer</option>
-          <option value="solid gauge">solid gauge</option>
-          <option value="vumeter">vumeter</option>
+            <option value="line">Line</option>
+            <option value="spline">Spline</option>
+            <option value="stepline">Stepline</option>
+            <option value="point">Point maker</option>
+            <option value="speedometer">Speedometer</option>
+            <option value="thermometer">Thermometer</option>
+            <!--<option value="plineline">Plineline</option>
+            <option value="point marker">Point marker</option>
+            <option value="thermometer">thermometer</option>
+            <option value="solid gauge">solid gauge</option>
+            <option value="vumeter">vumeter</option>-->
         </select>
       </label>
     </div>
@@ -275,14 +278,17 @@
         <h4 class="button_name"></h4>
       </div>
       <span id="sliderOutput3" class="columns large-3 outpt text-right slider_id"></span>
+
       <div class="row">
         <div class="small-12 medium-12 columns">
-          <div class="range-slider slider_options" data-slider data-options="display_selector: #sliderOutput3;">
+          <div class="range-slider slider_options" data-slider data-options="display_selector: #sliderOutput3, .selector;">
             <span class="range-slider-handle" role="slider" tabindex="0"></span>
             <span class="range-slider-active-segment"></span>
+            <!--<input type="hidden"/>-->
           </div>
         </div>
       </div>
+
   </div>
 </div>
 
@@ -315,6 +321,35 @@
     </div>
   <div class="large-2 columns text-center w-value"><span class="text-right l-value">Latest value</span><div class="rounded-widget latest_value"></div></div>
 </div>
+
+<div id="RenameDashboardModal" class="reveal-modal large rename_dashboard" data-reveal="" style="visibility: hidden; display: block; top: 100px; opacity: 1;">
+    <h2>Rename dashboard</h2>
+    <form>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Dashboard name
+                    <input type="text" id="rename_dashboard_name"/>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 medium-6 small-6 columns text-right">
+                <a href="#" class="button success large radius" id="ok_rename_dashboard">Ok</a>
+            </div>
+            <div class="large-6 medium-6 small-6 columns text-left">
+                <a href="#" class="button alert large radius" id="cancel_rename_dashboard">Cancel</a>
+            </div>
+        </div>
+        <input type="hidden" id="rename_dashboard_id"/>
+    </form>
+
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+
+
+
+
+
    <script>
       $(document).foundation();
     </script> 

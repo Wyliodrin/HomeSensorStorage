@@ -240,17 +240,19 @@ function deleteDashboard(dashboardId, callbackFunction)
 	});
 }
 
-function deleteGraph(graphId, callbackFunction){
+function removeGraph(graphId, callbackFunction){
+    console.log(graphId);
     var query="delete from "+graphTable+" where id=" +mysql.escape(graphId)+";";
     connection.query(query, function(err, rows){
-        if(err)
-            console.log("Could not delete graph "+dashboardTable+' '+err);
-        else
-        {
-            clearSignalValueTables(function(err){
-                callbackFunction(err);
-            });
+        if(err) {
+            console.log("Could not delete graph " + dashboardTable + ' ' + err);
+            return;
         }
+           /* clearSignalValueTables(function(err){
+                callbackFunction(err);
+            });*/
+        console.log("delete");
+        callbackFunction(err);
     });
 }
 
@@ -316,10 +318,10 @@ function getAllDashboards(callbackFunction)
 	});
 }
 
-function getDashboardGraphs(dashboardid, callbackFunction)
+function getDashboardGraphs(dashboardId, callbackFunction)
 {
 	var query = "select * from ?? where dashboard = ?";
-	query = mysql.format(query,[graphTable, dashboardid]);
+	query = mysql.format(query,[graphTable, dashboardId]);
 	connection.query(query, function(err,rows){
 		if(!err)
 		{
@@ -332,6 +334,86 @@ function getDashboardGraphs(dashboardid, callbackFunction)
 		}
 	});
 }
+
+function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
+    //create the query to get all the graphs with their signals
+    var query="SELECT " +
+        "graphs.id as graphId, graphs.name as graphName, graphs.description as graphDescription, graphs.unit as graphUnit, graphs.type as graphType," +
+        "signals.id as signalId, signals.name as signalName, signals.dashboarduuid as signalDashboardUUID " +
+        "FROM "+graphTable+" graphs " +
+        "INNER JOIN "+correspondenceTable+" correspondence ON graphs.id=correspondence.graphid "+
+        "INNER JOIN "+signalTable+" signals ON correspondence.signalid=signals.id " +
+        "WHERE graphs.dashboard="+dashboardId;
+    //execute the query
+    connection.query(query,function(err,rows){
+        if(err){
+            console.log("Could not retrieve graphs and signals data"+graphTable+" "+err);
+            callbackFunction(err,[]);
+            return;
+        }
+
+        var graphs=new Array();
+        console.log(rows.length);
+        for(var index=0;index<rows.length;index++) {
+            if(!arrayContainsElement(graphs,rows[index],function(param1,param2){return param1.graphId==param2.graphId})){
+                graphs.push({
+                    graphId: rows[index].graphId,
+                    graphName: rows[index].graphName,
+                    graphDescription: rows[index].graphDescription,
+                    graphUnit: rows[index].graphUnit,
+                    graphType: rows[index].graphType,
+                    graphSignals: new Array({
+                        signalId: rows[index].signalId,
+                        signalName: rows[index].signalName,
+                        signalDashboardUUID: rows[index].signalDashboardUUID
+                    })
+                });
+            }
+            else{
+                var graph;
+                for(var graphIndex=0;graphIndex<graphs.length;graphIndex++)
+                    if(graphs[graphIndex].graphId==rows[index].graphId){
+                        graph=graphs[graphIndex];
+                        break;
+                    }
+                if(!arrayContainsElement(graph.graphSignals,rows[index],function(param1,param2){return param1.signalId==param2.signalId}))
+                    graph.graphSignals.push({
+                        signalId: rows[index].signalId,
+                        signalName: rows[index].signalName,
+                        signalDashboardUUID: rows[index].signalDashboardUUID
+                    });
+            }
+        }
+
+        callbackFunction(err,graphs);
+
+    });
+}
+
+function getSignalsValues(signalsIds,callbackFunction){
+    var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'wsignalvalue%'"// AS tables";// WHERE 'wsignalvalue%'
+    connection.query(query,function(err,rows){
+        if(err){
+            console.log(err);
+            return;
+        }
+
+        /*var finalSignalsIds="";
+        for(var rowIndex=0;rowIndex<rows.length;rowIndex++){
+            var signalTableId=rows[rowIndex].name.substr("wsignalvalue".length,rows[rowIndex].name.length);
+            if(signalsIds.has(signalTableId))
+        }*/
+    })
+}
+
+function arrayContainsElement(elementsArray,element,compareFunction){
+    for(var index=0;index<elementsArray.length;index++) {
+        if(compareFunction(elementsArray[index],element))
+            return true;
+    }
+    return false;
+}
+
 
 function getDashboardSignals(dashboardid, callbackFunction)
 {
@@ -424,7 +506,7 @@ function getGraphSignalsForDashBoard(dashboardId, datetime, callbackFunction){
 
             for(var index=0;index<rows.length;index++){
                 query="SELECT * FROM ";
-                console.log(rows[index]);
+                //console.log(rows[index]);
             }
         });
     });
@@ -448,16 +530,17 @@ function getSignalValues(signalid, callbackFunction)
 	});
 }
 
-function getDashboard(dashboardid, callbackFunction)
+function getDashboard(dashboardId, callbackFunction)
 {
-	var query = "select * from "+dashboardTable+" where id = "+mysql.escape(dashboardid)+";";
+	var query = "select * from "+dashboardTable+" where id = "+mysql.escape(dashboardId)+";";
 	connection.query(query, function(err,rows){
 		if(!err && rows.length>0)
 		{
 			callbackFunction(null,rows[0]);
 		}
-		else
-			callbackFunction(err, null);
+		else {
+            callbackFunction(err, null);
+        }
 	})
 }
 
@@ -517,7 +600,7 @@ function getButtonValue(id, callbackFunction)
 
 function getButtons(dashboarduuid, callbackFunction)
 {
-	var query = "select * from ?? where dashboarduuid=?";
+	var query = "select id as buttonId, name as buttonName, type as buttonType, value as buttonValue, dashboarduuid as dashboardUUID from ?? where dashboarduuid=?";
 	query = mysql.format(query,[buttonTable,dashboarduuid]);
 	connection.query(query, function(err,buttons){
 		callbackFunction(err, buttons);
@@ -575,6 +658,9 @@ exports.getButton = getButton;
 
 //mod victor
 exports.renameDashboard= renameDashboard;
-exports.deleteGraph=deleteGraph;
+exports.removeGraph=removeGraph;
 
 exports.getGraphSignalsForDashBoard=getGraphSignalsForDashBoard;
+
+exports.getDashboardsGraphsWithSignals=getDashboardsGraphsWithSignals;
+exports.getSignalsValues=getSignalsValues;
