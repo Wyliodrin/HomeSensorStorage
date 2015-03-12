@@ -1,3 +1,6 @@
+var lastDatetime=0;
+var globalGraphs=new Array();
+
 function createSeries(signals,graphType){
     var series=new Array();
     for(var index=0;index<signals.length;index++){
@@ -50,18 +53,34 @@ function createSeries(signals,graphType){
 }
 
 function addLine(graph,container,lastValueContainer){
-    /*var series=createSeriesAux(graph.graphSignals);
-    lastValueContainer.text("a");
-    containter.highcharts({
-        chart: {type:'line'},
-        step: true,
-        //title: {text: graph.graphName},
-        series: series
-    })*/
+
+    /*$(function () {
+        $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
+            alert(JSON.stringify(data));
+        });
+    });*/
+
+    /*for(var graphIndex=0;graphIndex<graphs.length;graphIndex++) {
+        globalGraphs.push(graphs[graphIndex]);
+    }*/
+    var a=new myGraph();
 
     var series=createSeries(graph.graphSignals,graph.graphType);
 
-    container.highcharts('StockChart',
+    //a.setSeries(series);
+    a.setGraph(graph);
+    a.setSignals(graph.graphSignals);
+    a.createSeries();
+    a.setContainer(container);
+    a.drawGraph();
+
+    globalGraphs.push(a);
+
+    /*var myLineWidget=new MyLineWidget();
+    myLineWidget.randomData();
+    myLineWidget.draw(1);*/
+
+    /*container.highcharts('StockChart',
         {
             rangeSelector: {
                 selected: 1
@@ -73,9 +92,9 @@ function addLine(graph,container,lastValueContainer){
 
             series: series
         }
-    );
+    );*/
 
-    lastValueContainer.text(series[0].data[series[0].data.length-1]);
+    //lastValueContainer.text(series[0].data[series[0].data.length-1]);
 }
 
 function addSpeedometer(graph, signals, latestValueContainer, container) {
@@ -252,10 +271,10 @@ $(document).ready(function () {
     //to do: rename to ok_add_graph
     $("#ok_add_sensor").click(function () {
         var graphName = $("#add_sensor_name").val();
-        var signalName = $("#add_signal_name").val();
         var graphDescription = $("#add_sensor_description").val();
         var graphUnit = $("#add_sensor_unit").val();
         var graphType = $("#add_sensor_graph").val();
+        var signalName = $("#add_signal_name").val();
         var dashboardUuid = $("#key").html();
 
         if (graphName.length == 0 || signalName.length == 0) {
@@ -266,13 +285,13 @@ $(document).ready(function () {
         //if the input is correct close the dialog
         $(".add_sensor").foundation("reveal", "close");
 
-        $.post("/add_graph",
+        $.post("/add_graph_and_signal",
             {
                 graphName: graphName,
-                signalName: signalName,
                 graphDescription: graphDescription,
                 graphUnit: graphUnit,
                 graphType: graphType,
+                signalName: signalName,
                 dashboardId: dashboardId,
                 dashboardUuid: dashboardUuid
             },
@@ -282,17 +301,30 @@ $(document).ready(function () {
                     return;
                 }
 
+                var graphName = $("#add_sensor_name").val("");
+                var graphDescription = $("#add_sensor_description").val("");
+                var graphUnit = $("#add_sensor_unit").val();
+                var graphType = $("#add_sensor_graph").val();
+                var signalName = $("#add_signal_name").val("");
+
+                var signal= {
+                    signalId: response.signalId,
+                    signalName: signalName,
+                    signalValues: [],
+                    dashboardUUID: dashboardUuid
+                };
+
                 var graph = {
                     graphId: response.graphId,
                     graphName: graphName,
                     graphDescription: graphDescription,
                     graphType: graphType,
                     graphUnit: graphUnit,
-                    dashboardId: dashboardId
+                    dashboardId: dashboardId,
+                    graphSignals: [signal]
                 };
-                addGraph(graph, [{singalId: response.signalId}]);
-                //sensors.push(sensor);
-                //$("#sensor_count").text(sensors.length);
+
+                addGraphAndSignal(graph);
             }
         );
 
@@ -362,16 +394,26 @@ $(document).ready(function () {
                 }
                 for (var i = 0; i < graphs.length; i++) {
                     var s = graphs[i];
-                    addGraph(graphs[i]);
+                    addGraphAndSignal(graphs[i]);
                 }
+
+                setInterval(function(){
+                    var signalsIds=new Array();
+                    for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
+                        for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++)
+                            if(signalsIds.indexOf(globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId)==-1)
+                                signalsIds.push(globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId);
+
+                    $.post("/get_signals_values",{signalsIds:signalsIds,lastDatetime:lastDatetime},function(response){
+                        if(response.status=="done"){
+                            //alert(JSON.stringify(response));
+                            for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
+                                globalGraphs[graphIndex].addSignalsValues(response.value);
+                        }
+                    })
+                },1000);
             }
         });
-    });
-
-    $.post("/get_signals_values",{signalsIds:[21,22,23,24]},function(response){
-        if(response.status=="done"){
-            //var signalsValues=response.s
-        }
     });
 
 });
@@ -447,7 +489,7 @@ function addButton(button) {
     });*/
 }
 
-function addGraph(graph) {
+function addGraphAndSignal(graph) {
     //create the sensor hdhml after the template
     var mySensor = $(".chart_template").clone();
     //remove the template class
@@ -473,18 +515,5 @@ function addGraph(graph) {
         addLine(graph,mySensor.find(".chart"),mySensor.find(".latest_value"));
     else if(graph.graphType == "speedometer")
         addSpeedometer(graph, signals, mySensor.find(".latest_value"), mySensor.find('.chart'));
-}
-
-function getLatestValues(signalid, lastValue, callbackFunction) {
-    $.post("/get_signal_values_interval", {id: signalid, min: lastValue}, function (val, textStatus) {
-        callbackFunction(val);
-
-    });
-}
-
-function getValues(signalid, callbackFunction) {
-    $.post("/get_signal_value", {id: signalid}, function (val, textStatus) {
-        callbackFunction(val);
-    });
 }
 

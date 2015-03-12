@@ -90,7 +90,7 @@ function getDashboardsGraphsAndButtons(req, res)
             res.status(200).send({status:"error"});
             return;
         }
-        database.getButtons(req.body.dashboarduuid, function(err, buttons){
+        database.getDashboardButtons(req.body.dashboarduuid, function(err, buttons){
             if(!err)
                 res.status(200).send({status:"done",buttons:buttons, graphs:graphs});
             else
@@ -102,7 +102,7 @@ function getDashboardsGraphsAndButtons(req, res)
             res.status(200).send({status:"error"});
             return;
         }
-        database.getButtons(req.body.dashboarduuid, function(err, buttons){
+        database.getDashboardButtons(req.body.dashboarduuid, function(err, buttons){
             if(!err)
                 res.status(200).send({status:"done",buttons:buttons, graphs:graphs});
             else
@@ -111,10 +111,10 @@ function getDashboardsGraphsAndButtons(req, res)
 	});*/
 }
 
-/*function addGraph(req, res)
+/*function addGraphAndSignal(req, res)
 {
 	var body = req.body;
-	database.addGraph(body.graphName, body.graphDescription, body.graphUnit, body.sensorGraph, body.dashboardId,function(err, graphid){
+	database.addGraphAndSignal(body.graphName, body.graphDescription, body.graphUnit, body.sensorGraph, body.dashboardId,function(err, graphid){
 		if(err)
 			res.status(200).send({status:"error"});
 
@@ -127,7 +127,7 @@ function getDashboardsGraphsAndButtons(req, res)
 	});
 }*/
 
-function addGraph(req,res){
+function addGraphAndSignal(req,res){
     var body = req.body;
     database.addGraph(body.graphName, body.graphDescription, body.graphUnit, body.graphType, body.dashboardId,function(err, graphId){
         if(err) {
@@ -206,7 +206,7 @@ function getLatestSignal(req, res)
 function getSignalValue(req, res)
 {
 	var body = req.body;
-	database.getSignalValues(body.id, function(err, values){
+	database.getSignalsValues(body.id, function(err, values){
 		if(!err)
 			res.status(200).send(values);
 		else
@@ -257,7 +257,7 @@ function addButton(req,res)
 
 function getButtons(req, res)
 {
-	database.getButtons(req.body.dashboarduuid, function(err, buttons){
+	database.getDashboardButtons(req.body.dashboarduuid, function(err, buttons){
 		if(!err)
 			res.status(200).send({status:"done",buttons:buttons});
 		else
@@ -295,10 +295,13 @@ function getButton(req,res)
 
 function getSignalsValues(req,res){
     var signalsIds=req.body.signalsIds;
-    database.getSignalsValues(signalsIds,function(err,signalsValues){
+    var lastDatetime=req.body.lastDatetime;
+    database.getSignalsValues(signalsIds, lastDatetime,function(err,data){
         if(err){
-
+            res.status(200).send({status:"error"});
+            return;
         }
+        res.status(200).send({status:"done", value:data});
     });
 }
 
@@ -317,11 +320,11 @@ module.exports=function(app)
 			res.redirect('/login');	  
 	});
 	app.get('/login',loadLogin);*/
-	app.post("/add_button",addButton);
+	/*app.post("/add_button",addButton);
 	app.post("/add_dashboard", addDashboard);
 	//app.post("/add_signal", addSignal);
-	//app.post("/add_graph",addGraph);
-	//app.post("/signal/get_buttons",getButtons);
+	//app.post("/add_graph",addGraphAndSignal);
+	//app.post("/signal/get_buttons",getDashboardButtons);
 	app.post("/signal/get_button", getButton);
 	app.post("/signal/add_signal_value", addSignalValue);
 	app.post("/get_dashboards",getDasboards);
@@ -339,15 +342,28 @@ module.exports=function(app)
 	app.post("/login",login);
 
     //mod victor
+    app.post("/add_graph_and_signal",addGraphAndSignal);
     app.post("/rename_dashboard", renameDashboard);
     app.post("/remove_graph", removeGraph);
 
     app.post("/get_dashboard_signals",getDashboardSignals);
-    app.post("/add_graph",addGraph);
     app.post("/get_dashboard_graphs_and_buttons",getDashboardsGraphsAndButtons);
 
     app.post("/get_signals_values",getSignalsValues);
 
 
-    app.put("/add_signal",addSignal);
+    app.put("/add_signal",addSignal);*/
+
+
+    app.get("/dashboard/:id",listDashboardData);
+    app.get("/dashboards", loadDashboards);
+
+    app.post("/add_graph_and_signal",addGraphAndSignal);
+
+    app.post("/get_dashboards",getDasboards);
+    app.post("/get_dashboard", getDashboard);
+    app.post("/get_dashboard_graphs_and_buttons",getDashboardsGraphsAndButtons);
+    app.post("/get_signals_values", getSignalsValues);
+
+    app.post("/get_dash_graph_button", getDashboardsGraphsAndButtons);
 }

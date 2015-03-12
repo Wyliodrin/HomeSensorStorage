@@ -5577,7 +5577,7 @@ Tick.prototype = {
 			tickPositionInfo = tickPositions.info,
 			dateTimeLabelFormat;
 
-		// Set the datetime label format. If a higher rank is set for this position, use that. If not,
+		// Set the lastDatetime label format. If a higher rank is set for this position, use that. If not,
 		// use the general format.
 		if (axis.isDatetimeAxis && tickPositionInfo) {
 			dateTimeLabelFormat = options.dateTimeLabelFormats[tickPositionInfo.higherRanks[pos] || tickPositionInfo.unitName];
@@ -6314,7 +6314,7 @@ Axis.prototype = {
 			//x: 0,
 			//y: 0
 		},
-		type: 'linear' // linear, logarithmic or datetime
+		type: 'linear' // linear, logarithmic or lastDatetime
 	},
 
 	/**
@@ -6434,7 +6434,7 @@ Axis.prototype = {
 
 		var options = this.options,
 			type = options.type,
-			isDatetimeAxis = type === 'datetime';
+			isDatetimeAxis = type === 'lastDatetime';
 
 		axis.labelFormatter = options.labels.formatter || axis.defaultLabelFormatter; // can be overwritten by dynamic format
 
@@ -6609,7 +6609,7 @@ Axis.prototype = {
 		} else if (categories) {
 			ret = value;
 
-		} else if (dateTimeLabelFormat) { // datetime axis
+		} else if (dateTimeLabelFormat) { // lastDatetime axis
 			ret = dateFormat(dateTimeLabelFormat, value);
 
 		} else if (i && numericSymbolDetector >= 1000) {
@@ -8181,8 +8181,8 @@ extend(Axis.prototype, AxisPlotLineOrBandExtension);
 /**
  * Set the tick positions to a time unit that makes sense, for example
  * on the first of each month or on every Monday. Return an array
- * with the time positions. Used in datetime axes as well as for grouping
- * data on a datetime axis.
+ * with the time positions. Used in lastDatetime axes as well as for grouping
+ * data on a lastDatetime axis.
  *
  * @param {Object} normalizedInterval The interval in axis values (ms) and the count
  * @param {Number} min The minimum in axis values
@@ -8915,7 +8915,7 @@ Tooltip.prototype = {
 			dateTimeLabelFormats = tooltipOptions.dateTimeLabelFormats,
 			xDateFormat = tooltipOptions.xDateFormat,
 			xAxis = series.xAxis,
-			isDateTime = xAxis && xAxis.options.type === 'datetime' && isNumber(point.key),
+			isDateTime = xAxis && xAxis.options.type === 'lastDatetime' && isNumber(point.key),
 			headerFormat = tooltipOptions.headerFormat,
 			closestPointRange = xAxis && xAxis.closestPointRange,
 			n;
@@ -18730,7 +18730,7 @@ tooltipProto.tooltipHeaderFormatter = function (point) {
 		ret;
 
 	// apply only to grouped series
-	if (xAxis && xAxis.options.type === 'datetime' && dataGroupingOptions && isNumber(point.key)) {
+	if (xAxis && xAxis.options.type === 'lastDatetime' && dataGroupingOptions && isNumber(point.key)) {
 
 		// set variables
 		currentDataGrouping = series.currentDataGrouping;
@@ -20325,7 +20325,7 @@ Scroller.prototype = {
 			}, navigatorOptions.xAxis, {
 				id: 'navigator-x-axis',
 				isX: true,
-				type: 'datetime',
+				type: 'lastDatetime',
 				index: xAxisIndex,
 				height: height,
 				offset: 0,
@@ -21481,7 +21481,7 @@ Highcharts.StockChart = function (options, callback) {
 				showLastLabel: true
 			}, xAxisOptions, // user options 
 			{ // forced options
-				type: 'datetime',
+				type: 'lastDatetime',
 				categories: null
 			},
 			disableStartOnTick

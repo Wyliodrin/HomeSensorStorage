@@ -78,7 +78,7 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 
     //mod victor
     myDashboard.find(".delete_dashboard_button").click({id:dashboardid},function(evt) {
-        dashboardid=evt.data.id;
+        var dashboardId=evt.data.id;
         $.post("/delete_dashboard",{id:dashboardid}, function(response, textStatus){
             if(response.status == "done")
             {
@@ -105,8 +105,9 @@ function addDashboard(name, dashboardid, buttons, sensors, graphType)
 
 function getGraphs(dashboard)
 {
-	var dashboardid = dashboard.id;
-	$.post("/get_dash_graph_button", {"dashboardid":dashboardid, dashboarduuid:dashboard.uuid}, function(response,textStatus){
+    //alert(JSON.stringify(dashboard));
+	var dashboardId = dashboard.id;
+	$.post("/get_dash_graph_button", {"dashboardid":dashboardId, dashboarduuid:dashboard.uuid}, function(response,textStatus){
 		if(response.status == "done")
 		{
 			var graphs = response.graphs;
@@ -118,7 +119,8 @@ function getGraphs(dashboard)
 				graphsPreview.push(graphs[i]);
 				i++;
 			}
-			addDashboard(dashboard.name, dashboardid, buttons, graphs, graphsPreview);
+            //alert(dashboardId)
+			addDashboard(dashboard.name, dashboardId, buttons, graphs, graphsPreview);
 		}
 });
 }

@@ -481,7 +481,7 @@
 				/*jslint eqeq: false*/
 					columns[col][row] = floatVal;
 					
-					// If the number is greater than milliseconds in a year, assume datetime
+					// If the number is greater than milliseconds in a year, assume lastDatetime
 					if (floatVal > 365 * 24 * 3600 * 1000) {
 						columns[col].isDatetime = true;
 					} else {
@@ -777,7 +777,7 @@
 				typeCol = columns[allSeriesBuilders[0].readers[0].columnIndex];
 				if (typeCol !== undefined) {
 					if (typeCol.isDatetime) {
-						type = 'datetime';
+						type = 'lastDatetime';
 					} else if (!typeCol.isNumeric) {
 						type = 'category';
 					}

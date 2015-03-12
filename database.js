@@ -4,6 +4,7 @@ var config = require('./config.js').data;
 var mysql = require('mysql');
 var uuid = require('node-uuid');
 var _ = require('underscore');
+var async=require("async");
 
 var connection = mysql.createConnection({
   host     : config.host,
@@ -63,6 +64,10 @@ function addDashboard(name, description,callbackFunction)
 function addGraph(name, description, unit, type,dashboard, callbackFunction)
 {
 	name = parseName(name);
+    var graphDescription=description;
+    var graphUnit=unit;
+    var graphType=type;
+
 	var query = "insert into "+graphTable+" (name, description, unit, type, dashboard) values ("+mysql.escape(name)+
 				", "+mysql.escape(description)+", "+mysql.escape(unit)+", "+mysql.escape(type)+", "
 				+mysql.escape(dashboard)+");";
@@ -89,12 +94,40 @@ function addSignalToGraph(signalid, graphid, callbackFunction)
 }
 
 
-function addSignal(name, dashboarduuid, graphid, callbackFunction)
+function addSignal(name, dashboarduuid, graphId, callbackFunction)
 {
-	var query = "select id from "+signalTable+" where name="+mysql.escape(name)+" and dashboarduuid="+
-				mysql.escape(dashboarduuid)+";";
+    //var signalName=mysql.escape(name);
+	//var query = "select id from "+signalTable+" where name="+mysql.escape(name)+" and dashboarduuid="+mysql.escape(dashboarduuid)+";";
+    var query = "SELECT id FROM "+signalTable+" WHERE name="+mysql.escape(name)+" AND dashboarduuid="+mysql.escape(dashboarduuid)+";";
 	connection.query(query, function(err,rows){
-		if(!err)
+        if(err){
+            console.log(err);
+            return;
+        }
+        if(rows.length!=0){
+            var signalId=rows.id;
+            addSignalToGraph(signalId, graphId, callbackFunction);
+            return;
+        }
+        query="INSERT INTO "+signalTable+" VALUES(NULL,'"+name+"','"+dashboarduuid+"')";
+        connection.query(query,function(err,rows){
+            if(err){
+                console.log("Could not add to table "+signalTable+" "+err);
+                return;
+            }
+            var signalId=rows.insertId;
+            var signalTable=signalTablePrefix+signalId;
+            query="CREATE TABLE ?? (id_signal INTEGER not null,ts timestamp(3) not null, value DOUBLE not null, PRIMARY KEY(ts))";
+            query=mysql.format(query,signalTable);
+            connection.query(query,function(err,rows){
+                if(err){
+                    console.log("Could not create table "+signalTable+" "+err);
+                    return;
+                }
+                addSignalToGraph(signalId,graphId,callbackFunction);
+            });
+        });
+		/*if(!err)
 		{
 			if(rows.length == 0)
 			{
@@ -111,7 +144,7 @@ function addSignal(name, dashboarduuid, graphid, callbackFunction)
 							if(err)
 								console.log("Could not create table "+signalTable+" "+err);
 							else
-								addSignalToGraph(signalid,graphid,callbackFunction);
+								addSignalToGraph(signalid,graphId,callbackFunction);
 						});
 					}
 					else
@@ -121,11 +154,11 @@ function addSignal(name, dashboarduuid, graphid, callbackFunction)
 			else
 			{
 				var signalid = rows.id;
-				addSignalToGraph(signalid, graphid, callbackFunction)
+				addSignalToGraph(signalid, graphId, callbackFunction)
 			}
 		}
 		else
-			console.log(signalTable+" database error: "+err);
+			console.log(signalTable+" database error: "+err);*/
 	});
 }
 
@@ -353,7 +386,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
         }
 
         var graphs=new Array();
-        console.log(rows.length);
+        //console.log(rows.length);
         for(var index=0;index<rows.length;index++) {
             if(!arrayContainsElement(graphs,rows[index],function(param1,param2){return param1.graphId==param2.graphId})){
                 graphs.push({
@@ -390,7 +423,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
     });
 }
 
-function getSignalsValues(signalsIds,callbackFunction){
+function getSignalsValues(signalsIds,datetime,callbackFunction){
     var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'wsignalvalue%'"// AS tables";// WHERE 'wsignalvalue%'
     connection.query(query,function(err,rows){
         if(err){
@@ -398,11 +431,38 @@ function getSignalsValues(signalsIds,callbackFunction){
             return;
         }
 
-        /*var finalSignalsIds="";
+        var wsignalValuesTablesIds=new Array();
         for(var rowIndex=0;rowIndex<rows.length;rowIndex++){
             var signalTableId=rows[rowIndex].name.substr("wsignalvalue".length,rows[rowIndex].name.length);
-            if(signalsIds.has(signalTableId))
-        }*/
+            if(signalsIds.indexOf(signalTableId)>-1)
+                wsignalValuesTablesIds.push(signalTableId);
+        }
+
+        var queryFunctions=new Array();
+        var signalsWithValues=new Array();
+        for(var wSignalTableId=0;wSignalTableId<wsignalValuesTablesIds.length;wSignalTableId++) {
+            queryFunctions.push(function (index, datetime,signalsWithValues, localCallbackFunction) {
+                console.log(datetime==null);
+                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesIds[index]+" ORDER BY ts DESC";
+                connection.query(query, function (err, rows) {
+                    if(err){
+                        console.log(err);
+                        return;
+                    }
+                    var pairsArray=new Array();
+                    for(var rowIndex=0;rowIndex<rows.length;rowIndex++)
+                        pairsArray.push([rows[rowIndex]["ts"],rows[rowIndex]["value"]]);
+                    signalsWithValues.push({signalId:wsignalValuesTablesIds[index],signalValues:pairsArray});
+                    if(index==wsignalValuesTablesIds.length-1){
+                        callbackFunction(err,signalsWithValues);
+                    }
+                    localCallbackFunction();
+                })
+            }.bind (null, wSignalTableId, datetime, signalsWithValues));
+        }
+
+        async.series(queryFunctions);
+
     })
 }
 
@@ -512,7 +572,7 @@ function getGraphSignalsForDashBoard(dashboardId, datetime, callbackFunction){
     });
 }
 
-function getSignalValues(signalid, callbackFunction)
+/*function getSignalsValues(signalid, callbackFunction)
 {
 	var query = "select value, UNIX_TIMESTAMP(ts) as ts from ??";
 	var tableName = signalTablePrefix+signalid;
@@ -528,7 +588,7 @@ function getSignalValues(signalid, callbackFunction)
 			callbackFunction(err);
 		}
 	});
-}
+}*/
 
 function getDashboard(dashboardId, callbackFunction)
 {
@@ -598,7 +658,7 @@ function getButtonValue(id, callbackFunction)
 	});
 }
 
-function getButtons(dashboarduuid, callbackFunction)
+function getDashboardButtons(dashboarduuid, callbackFunction)
 {
 	var query = "select id as buttonId, name as buttonName, type as buttonType, value as buttonValue, dashboarduuid as dashboardUUID from ?? where dashboarduuid=?";
 	query = mysql.format(query,[buttonTable,dashboarduuid]);
@@ -637,18 +697,27 @@ function getButton(dashboarduuid, name, callbackFunction)
 	});
 }
 
+
+exports.addGraph=addGraph;
+exports.addSignal = addSignal;
+
+exports.getAllDashboards = getAllDashboards;
+exports.getDashboard = getDashboard;
+exports.getDashboardsGraphsWithSignals=getDashboardsGraphsWithSignals;
+exports.getDashboardButtons = getDashboardButtons;
+exports.getSignalsValues=getSignalsValues;
+/*exports.addSignal = addSignal;
+
 exports.addButton = addButton;
-exports.getButtons = getButtons;
+exports.getDashboardButtons = getDashboardButtons;
 exports.getButtonValue = getButtonValue;
 exports.getDashboard = getDashboard;
 exports.getAllDashboards = getAllDashboards;
 exports.getDashboard = getDashboard;
 exports.getDashboardGraphs = getDashboardGraphs;
-exports.getSignalValues = getSignalValues;
+exports.getSignalsValues = getSignalsValues;
 exports.addDashboard = addDashboard;
 exports.deleteDashboard = deleteDashboard;
-exports.addGraph = addGraph;
-exports.addSignal = addSignal;
 exports.getGraphSignals = getGraphSignals;
 exports.addSignalValue = addSignalValue;
 exports.getLatestSignalValue = getLatestSignalValue;
@@ -663,4 +732,4 @@ exports.removeGraph=removeGraph;
 exports.getGraphSignalsForDashBoard=getGraphSignalsForDashBoard;
 
 exports.getDashboardsGraphsWithSignals=getDashboardsGraphsWithSignals;
-exports.getSignalsValues=getSignalsValues;
+exports.getSignalsValues=getSignalsValues;*/
