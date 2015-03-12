@@ -348,10 +348,10 @@ module.exports=function(app)
     app.post("/get_dashboard_signals",getDashboardSignals);
     app.post("/get_dashboard_graphs_and_buttons",getDashboardsGraphsAndButtons);
 
-    app.post("/get_signals_values",getSignalsValues);
+    app.post("/get_signals_values",getSignalsValues);*/
 
 
-    app.put("/add_signal",addSignal);*/
+    app.put("/add_signal",addSignal);app.post("/add_signal", addSignal);
 
 
     app.get("/dashboard/:id",listDashboardData);

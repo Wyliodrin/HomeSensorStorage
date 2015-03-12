@@ -109,7 +109,7 @@ MyLineWidget.prototype.addValueToSignal = function (name, value, ts, text)
 {
 	// console.log (ts);
 	var n = this.signalNr (name);
-	if (n >= 0) if (!this.signals[n].ts || this.signals[n].ts < nr) this.signals[n].ts = ts;
+	if (n >= 0) if (!this.signals[n].ts || this.signals[n].ts < ts) this.signals[n].ts = ts;
 	if (this.chart)
 	{
 		// console.log (this.chart.series[ns].points.length);

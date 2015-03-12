@@ -450,7 +450,7 @@ function getSignalsValues(signalsInfos,callbackFunction){
                 // var myDate_string = myDate_string.replace("T"," ");
                 // var myDate_string = myDate_string.substring(0, myDate_string.length - 5);
 
-                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE ts>"+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts DESC";
+                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE UNIX_TIMESTAMP(ts) > "+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts ASC";
                 connection.query(query, function (err, rows) {
                     if(err){
                         console.log(err);

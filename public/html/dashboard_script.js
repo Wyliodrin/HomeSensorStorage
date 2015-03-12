@@ -406,13 +406,15 @@ $(document).ready(function () {
                     {
                         _.each (globalGraphs[graphIndex].signals, function (signal)
                         {
-                            signals.set (signal.name, signal);
-                        });
-                        signals.forEach (function (s)
-                        {
-                            signalsInfos.push ({signalId: s.id, signalName: s.name, signalDatetime:s.ts});
+                            console.log (signal);
+                            signals.set (signal.id+"", signal);
                         });
                     }
+                    signals.forEach (function (s)
+                    {
+                        console.log (s.name);
+                        signalsInfos.push ({signalId: s.id, signalName: s.name, signalDatetime:s.ts});
+                    });
                         // for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++) {
                         //     contains=false;
                         //     for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
@@ -436,6 +438,7 @@ $(document).ready(function () {
                                     {
                                         for (var valueIndex = 0; valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
                                             globalGraphs[graphIndex].addValueToSignal (response.value[signalIndex].signalName, response.value[signalIndex].signalValues[valueIndex][1], response.value[signalIndex].signalValues[valueIndex][0]);
+                                            globalGraphs[graphIndex].update ();
                                     }
                                 }
                                 // globalGraphs[graphIndex].addSignalsValues(response.value);
@@ -559,5 +562,31 @@ function addGraphAndSignal(graph) {
         line.draw (mySensor.find ('.chart'));
         globalGraphs.push (line);
     }
+    else if(graph.graphType=="spline"){
+        var spline=new SplineLineWidget();
+        spline.name=graph.graphName;
+        spline.description=graph.graphDescription;
+        spline.graphSignals.forEach(function(signal){
+            console.log (signal);
+            spline.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
+        });
+        spline.draw(mySensor.find(".chart"));
+        globalGraphs.push(spline);
+    }
+    else if(graph.graphType=="stepline"){
+        var stepLine=new StepLineWidget();
+        stepLine.name=graph.graphName;
+        stepLine.description=graph.graphDescription;
+        stepLine.graphSignals.forEach (function (signal)
+        {
+            console.log (signal);
+            stepLine.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
+        });
+        stepLine.draw (mySensor.find ('.chart'));
+        globalGraphs.push (stepLine);
+    }
+   /* else if(graph.graphType=="spline"){
+
+    }*/
 }
 
