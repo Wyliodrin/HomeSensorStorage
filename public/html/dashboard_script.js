@@ -566,7 +566,7 @@ function addGraphAndSignal(graph) {
         var spline=new SplineLineWidget();
         spline.name=graph.graphName;
         spline.description=graph.graphDescription;
-        spline.graphSignals.forEach(function(signal){
+        graph.graphSignals.forEach(function(signal){
             console.log (signal);
             spline.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
         });
@@ -577,7 +577,7 @@ function addGraphAndSignal(graph) {
         var stepLine=new StepLineWidget();
         stepLine.name=graph.graphName;
         stepLine.description=graph.graphDescription;
-        stepLine.graphSignals.forEach (function (signal)
+        graph.graphSignals.forEach (function (signal)
         {
             console.log (signal);
             stepLine.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
