@@ -445,10 +445,10 @@ function getSignalsValues(signalsInfos,callbackFunction){
         for(var wSignalTableId=0;wSignalTableId<wsignalValuesTablesInfos.length;wSignalTableId++) {
             queryFunctions.push(function (index,signalsWithValues, localCallbackFunction) {
 
-                var myDate = new Date(wsignalValuesTablesInfos[index].signalDatetime);
-                var myDate_string = myDate.toISOString();
-                var myDate_string = myDate_string.replace("T"," ");
-                var myDate_string = myDate_string.substring(0, myDate_string.length - 5);
+                // var myDate = new Date(wsignalValuesTablesInfos[index].signalDatetime);
+                // var myDate_string = myDate.toISOString();
+                // var myDate_string = myDate_string.replace("T"," ");
+                // var myDate_string = myDate_string.substring(0, myDate_string.length - 5);
 
                 var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE ts>"+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts DESC";
                 connection.query(query, function (err, rows) {

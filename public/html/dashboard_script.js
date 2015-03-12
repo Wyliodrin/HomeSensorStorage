@@ -401,25 +401,44 @@ $(document).ready(function () {
                 setInterval(function(){
                     var signalsInfos=new Array();
                     var contains=false;
+                    var signals = dictionary ();
                     for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
-                        for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++) {
-                            contains=false;
-                            for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
-                                if (signalsInfos[signalInfoIndex].signalId == globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId)
-                                    contains=true;
-                            if(!contains)
-                                signalsInfos.push({
-                                    signalId:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId,
-                                    signalName:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalName,
-                                    signalDatetime:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalDatetime
-                                });
-                        }
+                    {
+                        _.each (globalGraphs[graphIndex].signals, function (signal)
+                        {
+                            signals.set (signal.name, signal);
+                        });
+                        signals.forEach (function (s)
+                        {
+                            signalsInfos.push ({signalId: s.id, signalName: s.name, signalDatetime:s.ts});
+                        });
+                    }
+                        // for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++) {
+                        //     contains=false;
+                        //     for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
+                        //         if (signalsInfos[signalInfoIndex].signalId == globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId)
+                        //             contains=true;
+                        //     if(!contains)
+                        //         signalsInfos.push({
+                        //             signalId:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId,
+                        //             signalName:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalName,
+                        //             signalDatetime:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalDatetime
+                        //         });
+                        // }
                     //console.log(signalsInfos);
 
                     $.post("/get_signals_values",{signalsInfos:signalsInfos},function(response){
                         if(response.status=="done"){
                             for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
-                                globalGraphs[graphIndex].addSignalsValues(response.value);
+                                for (var signalIndex = 0; signalIndex < response.value.length; signalIndex++)
+                                {
+                                    if (globalGraphs[graphIndex].signalNr (response.value[signalIndex].signalName)>=0)
+                                    {
+                                        for (var valueIndex = 0; valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
+                                            globalGraphs[graphIndex].addValueToSignal (response.value[signalIndex].signalName, response.value[signalIndex].signalValues[valueIndex][1], response.value[signalIndex].signalValues[valueIndex][0]);
+                                    }
+                                }
+                                // globalGraphs[graphIndex].addSignalsValues(response.value);
                         }
                     })
                 },1000);
@@ -535,8 +554,9 @@ function addGraphAndSignal(graph) {
         graph.graphSignals.forEach (function (signal)
         {
             console.log (signal);
-            line.addSignal ({name:signal.signalName, color:"#000000"});
+            line.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
         });
+        line.draw (mySensor.find ('.chart'));
         globalGraphs.push (line);
     }
 }
