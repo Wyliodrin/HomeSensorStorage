@@ -459,7 +459,7 @@ function getSignalsValues(signalsInfos,callbackFunction){
                     var pairsArray=new Array();
                     for(var rowIndex=0;rowIndex<rows.length;rowIndex++)
                         pairsArray.push([rows[rowIndex]["ts"],rows[rowIndex]["value"]]);
-                    signalsWithValues.push({signalId:wsignalValuesTablesInfos[index],signalValues:pairsArray});
+                    signalsWithValues.push({signalInfo:wsignalValuesTablesInfos[index],signalValues:pairsArray});
                     if(index==wsignalValuesTablesInfos.length-1){
                         callbackFunction(err,signalsWithValues);
                     }

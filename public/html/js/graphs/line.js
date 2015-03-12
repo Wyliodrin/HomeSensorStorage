@@ -29,11 +29,13 @@ myGraph.prototype.setSeries=function(series){
 
 myGraph.prototype.addSignalsValues=function(signals){
     for(var signalIndex=0;signalIndex<this.graph.graphSignals.length;signalIndex++)
-        for(var auxSignalIndex=0;auxSignalIndex<signals.length;auxSignalIndex++)
-            if(this.graph.graphSignals[signalIndex].signalId==signals[auxSignalIndex].signalId) {
+        for(var auxSignalIndex=0;auxSignalIndex<signals.length;auxSignalIndex++) {
+            if (this.graph.graphSignals[signalIndex].signalId == signals[auxSignalIndex].signalInfo.signalId) {
                 this.graph.graphSignals[signalIndex].signalValues = signals[auxSignalIndex].signalValues;
+                console.log(this.graph.graphSignals[signalIndex].signalValues);
                 //alert(JSON.stringify(signals[auxSignalIndex].signalValues));
             }
+        }
                 //for(var signalValueIndex=0;signalValueIndex<signals[auxSignalIndex].signalValues.length;signalValueIndex++)
                   //  this.graph.signals.
                     //this.signals[signalIndex].signalValues.push(signals[auxSignalIndex].signalValues[signalValueIndex]);
