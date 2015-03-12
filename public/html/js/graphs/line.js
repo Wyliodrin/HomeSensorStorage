@@ -28,6 +28,7 @@ myGraph.prototype.setSeries=function(series){
 }
 
 myGraph.prototype.addSignalsValues=function(signals){
+    console.log (signals);
     for(var signalIndex=0;signalIndex<this.graph.graphSignals.length;signalIndex++)
         for(var auxSignalIndex=0;auxSignalIndex<signals.length;auxSignalIndex++) {
             if (this.graph.graphSignals[signalIndex].signalId == signals[auxSignalIndex].signalInfo.signalId) {

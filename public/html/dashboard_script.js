@@ -1,56 +1,56 @@
 var lastDatetime=0;
 var globalGraphs=new Array();
 
-function createSeries(signals,graphType){
-    var series=new Array();
-    for(var index=0;index<signals.length;index++){
-        if(graphType=='line')
-            series.push({
-                name: signals[index].signalName,
-                shadow: true,
-                tooptip: {
-                    valueDecimals: 2
-                },
-                data: [1,5,2,3,4,5,5]
-            });
-        else if(graphType=='stepline')
-            series.push({
-                name: signals[index].signalName,
-                shadow: true,
-                tooptip: {
-                    valueDecimals: 2
-                },
-                step: true,
-                data: [1,5,2,3,4,5,5]
-            });
-        else if(graphType=='spline')
-            series.push({
-                name: signals[index].signalName,
-                shadow: true,
-                tooptip: {
-                    valueDecimals: 2
-                },
-                type:'spline',
-                data: [1,5,2,3,4,5,5]
-            });
-        else if(graphType=='point'){
-            series.push({
-                name: signals[index].signalName,
-                shadow: true,
-                tooptip: {
-                    valueDecimals: 2
-                },
-                lineWidth: 0,
-                marker : {
-                    enabled : true,
-                    radius : 2
-                },
-                data: [1,5,2,3,4,5,3]
-            });
-        }
-    }
-    return series;
-}
+// function createSeries(signals,graphType){
+//     var series=new Array();
+//     for(var index=0;index<signals.length;index++){
+//         if(graphType=='line')
+//             series.push({
+//                 name: signals[index].signalName,
+//                 shadow: true,
+//                 tooptip: {
+//                     valueDecimals: 2
+//                 },
+//                 data: [1,5,2,3,4,5,5]
+//             });
+//         else if(graphType=='stepline')
+//             series.push({
+//                 name: signals[index].signalName,
+//                 shadow: true,
+//                 tooptip: {
+//                     valueDecimals: 2
+//                 },
+//                 step: true,
+//                 data: [1,5,2,3,4,5,5]
+//             });
+//         else if(graphType=='spline')
+//             series.push({
+//                 name: signals[index].signalName,
+//                 shadow: true,
+//                 tooptip: {
+//                     valueDecimals: 2
+//                 },
+//                 type:'spline',
+//                 data: [1,5,2,3,4,5,5]
+//             });
+//         else if(graphType=='point'){
+//             series.push({
+//                 name: signals[index].signalName,
+//                 shadow: true,
+//                 tooptip: {
+//                     valueDecimals: 2
+//                 },
+//                 lineWidth: 0,
+//                 marker : {
+//                     enabled : true,
+//                     radius : 2
+//                 },
+//                 data: [1,5,2,3,4,5,3]
+//             });
+//         }
+//     }
+//     return series;
+// }
 
 function addLine(graph,container,lastValueContainer){
 
@@ -65,7 +65,7 @@ function addLine(graph,container,lastValueContainer){
     }*/
     var a=new myGraph();
 
-    var series=createSeries(graph.graphSignals,graph.graphType);
+    // var series=createSeries(graph.graphSignals,graph.graphType);
 
     //a.setSeries(series);
     a.setGraph(graph);
@@ -521,9 +521,22 @@ function addGraphAndSignal(graph) {
         });
     });
 
-    if(graph.graphType=="line" || graph.graphType=="stepline" || graph.graphType=="spline" || graph.graphType=="point")
-        addLine(graph,mySensor.find(".chart"),mySensor.find(".latest_value"));
-    else if(graph.graphType == "speedometer")
-        addSpeedometer(graph, signals, mySensor.find(".latest_value"), mySensor.find('.chart'));
+    // if(graph.graphType=="line" || graph.graphType=="stepline" || graph.graphType=="spline" || graph.graphType=="point")
+    //     addLine(graph,mySensor.find(".chart"),mySensor.find(".latest_value"));
+    // else if(graph.graphType == "speedometer")
+    //     addSpeedometer(graph, signals, mySensor.find(".latest_value"), mySensor.find('.chart'));
+
+    if (graph.graphType == "line")
+    {
+        var line = new MyLineWidget ();
+        line.name = graph.graphName;
+        line.description = graph.graphDescription;
+        graph.graphSignals.forEach (function (signal)
+        {
+            console.log (signal);
+            line.addSignal ({name:signal.signalName, color:"#000000"});
+        });
+        globalGraphs.push (line);
+    }
 }
 
