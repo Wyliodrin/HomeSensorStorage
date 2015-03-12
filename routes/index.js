@@ -294,9 +294,8 @@ function getButton(req,res)
 }
 
 function getSignalsValues(req,res){
-    var signalsIds=req.body.signalsIds;
-    var lastDatetime=req.body.lastDatetime;
-    database.getSignalsValues(signalsIds, lastDatetime,function(err,data){
+    var signalsInfos=req.body.signalsInfos;
+    database.getSignalsValues(signalsInfos,function(err,data){
         if(err){
             res.status(200).send({status:"error"});
             return;

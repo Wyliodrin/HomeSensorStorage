@@ -398,6 +398,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
                     graphSignals: new Array({
                         signalId: rows[index].signalId,
                         signalName: rows[index].signalName,
+                        signalDatetime: 1,
                         signalDashboardUUID: rows[index].signalDashboardUUID
                     })
                 });
@@ -423,7 +424,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
     });
 }
 
-function getSignalsValues(signalsIds,datetime,callbackFunction){
+function getSignalsValues(signalsInfos,callbackFunction){
     var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'wsignalvalue%'"// AS tables";// WHERE 'wsignalvalue%'
     connection.query(query,function(err,rows){
         if(err){
@@ -431,19 +432,25 @@ function getSignalsValues(signalsIds,datetime,callbackFunction){
             return;
         }
 
-        var wsignalValuesTablesIds=new Array();
+        var wsignalValuesTablesInfos=new Array();
         for(var rowIndex=0;rowIndex<rows.length;rowIndex++){
             var signalTableId=rows[rowIndex].name.substr("wsignalvalue".length,rows[rowIndex].name.length);
-            if(signalsIds.indexOf(signalTableId)>-1)
-                wsignalValuesTablesIds.push(signalTableId);
+            for(var signalInfoIndex=0;signalInfoIndex<signalsInfos.length;signalInfoIndex++)
+                if(signalsInfos[signalInfoIndex].signalId==signalTableId)
+                    wsignalValuesTablesInfos.push(signalsInfos[signalInfoIndex]);
         }
 
         var queryFunctions=new Array();
         var signalsWithValues=new Array();
-        for(var wSignalTableId=0;wSignalTableId<wsignalValuesTablesIds.length;wSignalTableId++) {
-            queryFunctions.push(function (index, datetime,signalsWithValues, localCallbackFunction) {
-                console.log(datetime==null);
-                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesIds[index]+" ORDER BY ts DESC";
+        for(var wSignalTableId=0;wSignalTableId<wsignalValuesTablesInfos.length;wSignalTableId++) {
+            queryFunctions.push(function (index,signalsWithValues, localCallbackFunction) {
+
+                var myDate = new Date(wsignalValuesTablesInfos[index].signalDatetime);
+                var myDate_string = myDate.toISOString();
+                var myDate_string = myDate_string.replace("T"," ");
+                var myDate_string = myDate_string.substring(0, myDate_string.length - 5);
+
+                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE ts>"+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts DESC";
                 connection.query(query, function (err, rows) {
                     if(err){
                         console.log(err);
@@ -452,13 +459,14 @@ function getSignalsValues(signalsIds,datetime,callbackFunction){
                     var pairsArray=new Array();
                     for(var rowIndex=0;rowIndex<rows.length;rowIndex++)
                         pairsArray.push([rows[rowIndex]["ts"],rows[rowIndex]["value"]]);
-                    signalsWithValues.push({signalId:wsignalValuesTablesIds[index],signalValues:pairsArray});
-                    if(index==wsignalValuesTablesIds.length-1){
+                    signalsWithValues.push({signalId:wsignalValuesTablesInfos[index],signalValues:pairsArray});
+                    if(index==wsignalValuesTablesInfos.length-1){
                         callbackFunction(err,signalsWithValues);
                     }
+                    console.log(signalsWithValues);
                     localCallbackFunction();
                 })
-            }.bind (null, wSignalTableId, datetime, signalsWithValues));
+            }.bind (null, wSignalTableId, signalsWithValues));
         }
 
         async.series(queryFunctions);

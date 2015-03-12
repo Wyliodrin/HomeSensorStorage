@@ -2,21 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eeb905fb-4a8f-4e65-a81f-16fe267660ab" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/html/js/dictionary.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/html/js/graphs/line.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/html/js/graphs/widget.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/dashboard.html" afterPath="$PROJECT_DIR$/public/html/dashboard.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/dashboard_script.js" afterPath="$PROJECT_DIR$/public/html/dashboard_script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/modules/data.js" afterPath="$PROJECT_DIR$/public/html/js/modules/data.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/modules/data.src.js" afterPath="$PROJECT_DIR$/public/html/js/modules/data.src.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database.js" afterPath="$PROJECT_DIR$/database.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/highstock.js" afterPath="$PROJECT_DIR$/public/html/js/highstock.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/highstock.src.js" afterPath="$PROJECT_DIR$/public/html/js/highstock.src.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/index_script.js" afterPath="$PROJECT_DIR$/public/html/index_script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/vendor/modernizr.js" afterPath="$PROJECT_DIR$/public/html/js/vendor/modernizr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HomeSensorStorage.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,8 +32,8 @@
       <file leaf-file-name="dashboard_script.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.73318386" vertical-offset="910" max-vertical-offset="6987">
-              <caret line="92" column="26" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.39013454" vertical-offset="4582" max-vertical-offset="7157">
+              <caret line="404" column="32" selection-start-line="404" selection-start-column="32" selection-end-line="404" selection-end-column="32" />
               <folding>
                 <element signature="n#!!block;n#addSpeedometer#0" expanded="false" />
               </folding>
@@ -110,8 +98,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.75" vertical-offset="4905" max-vertical-offset="6375">
-              <caret line="298" column="23" selection-start-line="298" selection-start-column="23" selection-end-line="298" selection-end-column="23" />
+            <state vertical-scroll-proportion="-12.428572" vertical-offset="4701" max-vertical-offset="6358">
+              <caret line="297" column="27" selection-start-line="297" selection-start-column="27" selection-end-line="297" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -130,8 +118,8 @@
       <file leaf-file-name="database.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5064" max-vertical-offset="12597">
-              <caret line="431" column="9" selection-start-line="431" selection-start-column="9" selection-end-line="431" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="7140" max-vertical-offset="12733">
+              <caret line="465" column="49" selection-start-line="465" selection-start-column="49" selection-end-line="465" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -159,10 +147,10 @@
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/public/html/dashboard.html" />
         <option value="$PROJECT_DIR$/public/html/js/dictionary.js" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/public/html/js/graphs/line.js" />
-        <option value="$PROJECT_DIR$/public/html/dashboard_script.js" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/database.js" />
+        <option value="$PROJECT_DIR$/public/html/dashboard_script.js" />
       </list>
     </option>
   </component>
@@ -774,34 +762,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.75" vertical-offset="4905" max-vertical-offset="6375">
-          <caret line="298" column="23" selection-start-line="298" selection-start-column="23" selection-end-line="298" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/html/js/graphs/widget.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4605" max-vertical-offset="5525">
           <caret line="15" column="21" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/html/js/dictionary.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1819">
-          <caret line="34" column="19" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5064" max-vertical-offset="12597">
-          <caret line="431" column="9" selection-start-line="431" selection-start-column="9" selection-end-line="431" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -814,10 +778,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/html/js/dictionary.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1819">
+          <caret line="34" column="19" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.428572" vertical-offset="4701" max-vertical-offset="6358">
+          <caret line="297" column="27" selection-start-line="297" selection-start-column="27" selection-end-line="297" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7140" max-vertical-offset="12733">
+          <caret line="465" column="49" selection-start-line="465" selection-start-column="49" selection-end-line="465" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73318386" vertical-offset="910" max-vertical-offset="6987">
-          <caret line="92" column="26" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.39013454" vertical-offset="4582" max-vertical-offset="7157">
+          <caret line="404" column="32" selection-start-line="404" selection-start-column="32" selection-end-line="404" selection-end-column="32" />
           <folding>
             <element signature="n#!!block;n#addSpeedometer#0" expanded="false" />
           </folding>

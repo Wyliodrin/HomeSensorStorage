@@ -311,6 +311,7 @@ $(document).ready(function () {
                     signalId: response.signalId,
                     signalName: signalName,
                     signalValues: [],
+                    signalDatetime: 1,
                     dashboardUUID: dashboardUuid
                 };
 
@@ -398,15 +399,24 @@ $(document).ready(function () {
                 }
 
                 setInterval(function(){
-                    var signalsIds=new Array();
+                    var signalsInfos=new Array();
+                    var contains=false;
                     for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
-                        for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++)
-                            if(signalsIds.indexOf(globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId)==-1)
-                                signalsIds.push(globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId);
+                        for(var signalIndex=0;signalIndex<globalGraphs[graphIndex].graph.graphSignals.length;signalIndex++) {
+                            contains=false;
+                            for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
+                                if (signalsInfos[signalInfoIndex].signalId == globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId)
+                                    contains=true;
+                            if(!contains)
+                                signalsInfos.push({
+                                    signalId:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId,
+                                    signalDatetime:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalDatetime
+                                });
+                        }
+                    //console.log(signalsInfos);
 
-                    $.post("/get_signals_values",{signalsIds:signalsIds,lastDatetime:lastDatetime},function(response){
+                    $.post("/get_signals_values",{signalsInfos:signalsInfos},function(response){
                         if(response.status=="done"){
-                            //alert(JSON.stringify(response));
                             for(var graphIndex=0;graphIndex<globalGraphs.length;graphIndex++)
                                 globalGraphs[graphIndex].addSignalsValues(response.value);
                         }
