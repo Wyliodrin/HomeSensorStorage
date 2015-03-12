@@ -410,6 +410,7 @@ $(document).ready(function () {
                             if(!contains)
                                 signalsInfos.push({
                                     signalId:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalId,
+                                    signalName:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalName,
                                     signalDatetime:globalGraphs[graphIndex].graph.graphSignals[signalIndex].signalDatetime
                                 });
                         }

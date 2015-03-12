@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eeb905fb-4a8f-4e65-a81f-16fe267660ab" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/dashboard_script.js" afterPath="$PROJECT_DIR$/public/html/dashboard_script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database.js" afterPath="$PROJECT_DIR$/database.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/graphs/line.js" afterPath="$PROJECT_DIR$/public/html/js/graphs/line.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HomeSensorStorage.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,8 +32,8 @@
       <file leaf-file-name="dashboard_script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-16.678572" vertical-offset="4735" max-vertical-offset="7157">
-              <caret line="420" column="67" selection-start-line="420" selection-start-column="67" selection-end-line="420" selection-end-column="67" />
+            <state vertical-scroll-proportion="-13.357142" vertical-offset="4692" max-vertical-offset="7174">
+              <caret line="412" column="114" selection-start-line="412" selection-start-column="114" selection-end-line="412" selection-end-column="114" />
               <folding>
                 <element signature="n#!!block;n#addSpeedometer#0" expanded="false" />
               </folding>
@@ -54,8 +54,8 @@
       <file leaf-file-name="line.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/html/js/graphs/line.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46636772" vertical-offset="162" max-vertical-offset="9248">
-              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.42825112" vertical-offset="162" max-vertical-offset="9248">
+              <caret line="32" column="88" selection-start-line="32" selection-start-column="88" selection-end-line="32" selection-end-column="88" />
               <folding />
             </state>
           </provider>
@@ -118,8 +118,8 @@
       <file leaf-file-name="database.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="7140" max-vertical-offset="12733">
-              <caret line="455" column="41" selection-start-line="455" selection-start-column="41" selection-end-line="455" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="7327" max-vertical-offset="12716">
+              <caret line="473" column="1" selection-start-line="473" selection-start-column="1" selection-end-line="473" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -778,14 +778,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="7140" max-vertical-offset="12733">
-          <caret line="455" column="41" selection-start-line="455" selection-start-column="41" selection-end-line="455" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/html/js/dictionary.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1819">
@@ -794,10 +786,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7327" max-vertical-offset="12716">
+          <caret line="473" column="1" selection-start-line="473" selection-start-column="1" selection-end-line="473" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.678572" vertical-offset="4735" max-vertical-offset="7157">
-          <caret line="420" column="67" selection-start-line="420" selection-start-column="67" selection-end-line="420" selection-end-column="67" />
+        <state vertical-scroll-proportion="-13.357142" vertical-offset="4692" max-vertical-offset="7174">
+          <caret line="412" column="114" selection-start-line="412" selection-start-column="114" selection-end-line="412" selection-end-column="114" />
           <folding>
             <element signature="n#!!block;n#addSpeedometer#0" expanded="false" />
           </folding>
@@ -806,8 +806,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/html/js/graphs/line.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46636772" vertical-offset="162" max-vertical-offset="9248">
-          <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.42825112" vertical-offset="162" max-vertical-offset="9248">
+          <caret line="32" column="88" selection-start-line="32" selection-start-column="88" selection-end-line="32" selection-end-column="88" />
           <folding />
         </state>
       </provider>
