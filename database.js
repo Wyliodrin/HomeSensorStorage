@@ -750,6 +750,7 @@ function setSensorDescription(graphId,graphDescription, callbackFunction){
 exports.addGraph=addGraph;
 exports.addSignal = addSignal;
 exports.addButton = addButton;
+exports.addDashboard = addDashboard;
 
 exports.getAllDashboards = getAllDashboards;
 exports.getDashboard = getDashboard;
@@ -770,7 +771,6 @@ exports.getAllDashboards = getAllDashboards;
 exports.getDashboard = getDashboard;
 exports.getDashboardGraphs = getDashboardGraphs;
 exports.getSignalsValues = getSignalsValues;
-exports.addDashboard = addDashboard;
 exports.deleteDashboard = deleteDashboard;
 exports.getGraphSignals = getGraphSignals;
 exports.addSignalValue = addSignalValue;
