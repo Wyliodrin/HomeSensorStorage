@@ -337,6 +337,7 @@ function addGraphAndSignal(graph) {
         var spline=new SplineLineWidget();
         spline.name=graph.graphName;
         spline.description=graph.graphDescription;
+        spline.setLatestValueElement(mySensor.find(".latest_value"));
         graph.graphSignals.forEach(function(signal){
             console.log (signal);
             spline.addSignal ({id: signal.signalId, name:signal.signalName, color:"#000000", ts: 0});
@@ -348,6 +349,7 @@ function addGraphAndSignal(graph) {
         var stepLine=new StepLineWidget();
         stepLine.name=graph.graphName;
         stepLine.description=graph.graphDescription;
+        stepLine.setLatestValueElement(mySensor.find(".latest_value"));
         graph.graphSignals.forEach (function (signal)
         {
             console.log (signal);
@@ -360,6 +362,7 @@ function addGraphAndSignal(graph) {
         var pointMaker=new PointMarkerWidget();
         pointMaker.name=graph.graphName;
         pointMaker.description=graph.graphDescription;
+        pointMaker.setLatestValueElement(mySensor.find(".latest_value"));
         graph.graphSignals.forEach (function (signal)
         {
             console.log (signal);
@@ -372,6 +375,7 @@ function addGraphAndSignal(graph) {
         var spedometer=new SpeedometerWidget();
         spedometer.name=graph.graphName;
         spedometer.description=graph.graphDescription;
+        spedometer.setLatestValueElement(mySensor.find(".latest_value"));
         spedometer.addSignal ({id: graph.graphSignals[0].signalId, name:graph.graphSignals[0].signalName, color:"#000000", ts: 0});
         spedometer.draw (mySensor.find ('.chart'));
         globalGraphs.push (spedometer);
