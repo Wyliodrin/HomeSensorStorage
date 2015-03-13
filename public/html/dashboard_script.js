@@ -272,7 +272,8 @@ function addButton(button) {
         myButton.find("#exampleCheckboxSwitch").attr("id","switch"+button.buttonId);
         myButton.find(".l_set_ckecked").attr("for","switch"+button.buttonId);
 
-        myButton.find("#switch"+button.buttonId).prop("checked",true);
+        if(button.buttonValue)
+            myButton.find("#switch"+button.buttonId).prop("checked",true);
 
         myButton.find(".set_checked").click(function(buttonId){
             var buttonValue=$("#switch"+button.buttonId).is(":checked");
@@ -322,14 +323,21 @@ function addGraphAndSignal(graph) {
     });
     //add onclick action on the sensor
     //@ to do : rename the delete button to delete_graph_button
-    mySensor.find(".delete_chart_button").click({graphId: graph.graphId}, function (evt) {
+    mySensor.find(".delete_chart_button").click({graphId: graph.graphId,graphName:graph.graphName}, function (evt) {
         var graphId = evt.data.graphId;
-        if(confirm("Are you sure?"))
+        var graphName= evt.data.graphName;
+        if(confirm("Are you sure?")) {
+            for(var index=0;index<globalGraphs.length;index++)
+                if(globalGraphs[index].name==graphName) {
+                    globalGraphs.splice(globalGraphs.indexOf(index))
+                    break;
+                }
             $.post("/remove_graph", {graphId: graphId}, function (response, textStatus) {
                 if (response.status == "done") {
                     mySensor.remove();
                 }
             });
+        }
     });
 
     if (graph.graphType == "line")

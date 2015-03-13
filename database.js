@@ -474,6 +474,9 @@ function getSignalsValues(signalsInfos,callbackFunction){
                         return;
                     }
 
+                    if(rows.length==0)
+                        callbackFunction(err,[])
+
                     if(rows[0]["type"]=="speedometer" || rows[0]["type"] == "custom") {
                         //console.log(wsignalValuesTablesInfos[index].signalDatetime);
                         query = "SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM " + signalTablePrefix + wsignalValuesTablesInfos[index].signalId+" ORDER BY ts DESC LIMIT 0,1";
