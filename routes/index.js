@@ -156,11 +156,6 @@ function addSignal(req, res)
 	});
 }
 
-function removeSignal(req, res)
-{
-
-}
-
 function getGraphSignals(req, res)
 {
 	var body = req.body;
@@ -188,27 +183,6 @@ function addSignalValue(req, res)
 	database.addSignalValue(body.timestamp, body.value, body.name, body.dashboarduuid, function(err){
 		if(!err)
 			res.status(200).send({status:"done"});
-		else
-			res.status(500).send({status:"error"});
-	});
-}
-
-function getLatestSignal(req, res)
-{
-	database.getLatestSignalValue(req.body.id,function(err, value){
-		if(!err)
-			res.status(200).send({"value":value});
-		else
-			res.status(500).send({status:"error"});
-	});
-}
-
-function getSignalValue(req, res)
-{
-	var body = req.body;
-	database.getSignalsValues(body.id, function(err, values){
-		if(!err)
-			res.status(200).send(values);
 		else
 			res.status(500).send({status:"error"});
 	});
@@ -265,16 +239,6 @@ function getButtons(req, res)
 	});
 }
 
-function updateButton(req, res)
-{
-	database.updateButton(req.body.id, req.body.value, function(err){
-		if(!err)
-			res.status(200).send({status:"done"});
-		else
-			res.status(200).send({status:"error"});
-	});
-}
-
 function login(req, res)
 {
 	var pass = req.body.pass;
@@ -301,6 +265,31 @@ function getSignalsValues(req,res){
             return;
         }
         res.status(200).send({status:"done", value:data});
+    });
+}
+
+function setButtonValue(req, res){
+    var buttonId=req.body.buttonId;
+    var buttonValue=req.body.buttonValue;
+    database.setButtonValue(buttonId,buttonValue, function (err, data) {
+        if(err){
+            res.status(200).send({status:"error"});
+            return;
+        }
+        res.status(200).send({status:"done", data:data});
+    });
+}
+
+function setSensorDescription(req,res){
+    var graphId=req.body.graphId;
+    var graphDescription=req.body.sensorDescription;
+
+    database.setSensorDescription(graphId,graphDescription,function(err,data){
+        if(err){
+            res.status(200).send({status:"error"});
+            return;
+        }
+        res.status(200).send({status:"done", data:data});
     });
 }
 
@@ -331,14 +320,6 @@ module.exports=function(app)
 	//app.post("/get_dash_graph_button", getDashboardsGraphsAndButtons);
 	app.post("/get_graph_signals", getGraphSignals);
 	app.post("/get_signal_values_interval",getSignalValuesInterval);
-	app.post("/delete_dashboard", deleteDashboard);	
-	app.post("/remove_signal", removeSignal);
-	app.post("/get_latest_signal", getLatestSignal);
-	app.post("/get_signal_value", getSignalValue);
-	app.get("/dashboards", loadDashboards);
-	app.get("/dashboard/:id",listDashboardData);
-	app.post("/update_button",updateButton);
-	app.post("/login",login);
 
     //mod victor
     app.post("/add_graph_and_signal",addGraphAndSignal);
@@ -350,19 +331,29 @@ module.exports=function(app)
 
     app.post("/get_signals_values",getSignalsValues);*/
 
+    app.post("/login",login);
 
     app.put("/add_signal",addSignal);app.post("/add_signal", addSignal);
 
+    app.post("/add_dashboard", addDashboard);
+    app.post("/add_button",addButton);
 
     app.get("/dashboard/:id",listDashboardData);
     app.get("/dashboards", loadDashboards);
 
     app.post("/add_graph_and_signal",addGraphAndSignal);
 
-    app.post("/get_dashboards",getDasboards);
     app.post("/get_dashboard", getDashboard);
+    app.post("/get_dashboards", getDasboards);
     app.post("/get_dashboard_graphs_and_buttons",getDashboardsGraphsAndButtons);
     app.post("/get_signals_values", getSignalsValues);
 
     app.post("/get_dash_graph_button", getDashboardsGraphsAndButtons);
+
+    app.post("/set_button_value",setButtonValue);
+    app.post("/set_sensor_description",setSensorDescription);
+
+    app.post("/remove_graph", removeGraph);
+
+    app.post("/delete_dashboard", deleteDashboard);
 }

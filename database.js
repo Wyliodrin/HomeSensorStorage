@@ -117,7 +117,7 @@ function addSignal(name, dashboarduuid, graphId, callbackFunction)
             }
             var signalId=rows.insertId;
             var signalTable=signalTablePrefix+signalId;
-            query="CREATE TABLE ?? (id_signal INTEGER not null,ts timestamp(3) not null, value DOUBLE not null, PRIMARY KEY(ts))";
+            query="CREATE TABLE ?? (ts timestamp(3) not null, value DOUBLE not null, PRIMARY KEY(ts))";
             query=mysql.format(query,signalTable);
             connection.query(query,function(err,rows){
                 if(err){
@@ -289,6 +289,10 @@ function removeGraph(graphId, callbackFunction){
     });
 }
 
+/*function removeSignal(graphId, callbackFunction){
+    var query="SELECT * FROM "+correspondenceTable+" WHERE graphid="+graphId;
+}*/
+
 function renameDashboard(dashboardId, name, callbackFunction){
     var signalsTable = config.prefix+mysql.escape(dashboardId);
     var query = "update "+dashboardTable+" set name="+mysql.escape(name)+" where id = "+mysql.escape(dashboardId)+";";
@@ -385,6 +389,8 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
             return;
         }
 
+        console.log(rows);
+
         var graphs=new Array();
         //console.log(rows.length);
         for(var index=0;index<rows.length;index++) {
@@ -425,6 +431,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
 }
 
 function getSignalsValues(signalsInfos,callbackFunction){
+
     var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'wsignalvalue%'"// AS tables";// WHERE 'wsignalvalue%'
     connection.query(query,function(err,rows){
         if(err){
@@ -433,10 +440,10 @@ function getSignalsValues(signalsInfos,callbackFunction){
         }
 
         var wsignalValuesTablesInfos=new Array();
-        for(var rowIndex=0;rowIndex<rows.length;rowIndex++){
-            var signalTableId=rows[rowIndex].name.substr("wsignalvalue".length,rows[rowIndex].name.length);
-            for(var signalInfoIndex=0;signalInfoIndex<signalsInfos.length;signalInfoIndex++)
-                if(signalsInfos[signalInfoIndex].signalId==signalTableId)
+        for(var rowIndex=0;rowIndex<rows.length;rowIndex++) {
+            var signalTableId = rows[rowIndex].name.substr("wsignalvalue".length, rows[rowIndex].name.length);
+            for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
+                if (signalsInfos[signalInfoIndex].signalId == signalTableId)
                     wsignalValuesTablesInfos.push(signalsInfos[signalInfoIndex]);
         }
 
@@ -445,26 +452,41 @@ function getSignalsValues(signalsInfos,callbackFunction){
         for(var wSignalTableId=0;wSignalTableId<wsignalValuesTablesInfos.length;wSignalTableId++) {
             queryFunctions.push(function (index,signalsWithValues, localCallbackFunction) {
 
-                // var myDate = new Date(wsignalValuesTablesInfos[index].signalDatetime);
-                // var myDate_string = myDate.toISOString();
-                // var myDate_string = myDate_string.replace("T"," ");
-                // var myDate_string = myDate_string.substring(0, myDate_string.length - 5);
-
-                var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE UNIX_TIMESTAMP(ts) > "+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts ASC";
-                connection.query(query, function (err, rows) {
+                var query="SELECT * FROM "+signalTable+" signals " +
+                "INNER JOIN "+correspondenceTable+" ON signals.id=signalid " +
+                "INNER JOIN " +graphTable+" graphs ON graphs.id=graphid "+
+                "WHERE signals.id="+wsignalValuesTablesInfos[index].signalId;
+                connection.query(query, function(err,rows){
                     if(err){
                         console.log(err);
                         return;
                     }
-                    var pairsArray=new Array();
-                    for(var rowIndex=0;rowIndex<rows.length;rowIndex++)
-                        pairsArray.push([rows[rowIndex]["ts"],rows[rowIndex]["value"]]);
-                    signalsWithValues.push({signalId:wsignalValuesTablesInfos[index].signalId, signalName:wsignalValuesTablesInfos[index].signalName,signalValues:pairsArray});
-                    if(index==wsignalValuesTablesInfos.length-1){
-                        callbackFunction(err,signalsWithValues);
+
+                    if(rows[0]["type"]=="speedometer") {
+                        //console.log(wsignalValuesTablesInfos[index].signalDatetime);
+                        query = "SELECT MAX(UNIX_TIMESTAMP(ts)) as ts,value as value FROM " + signalTablePrefix + wsignalValuesTablesInfos[index].signalId;
                     }
-                    localCallbackFunction();
-                })
+                    else
+                        query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE UNIX_TIMESTAMP(ts) > "+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts ASC";
+                    connection.query(query, function (err, rows) {
+                        if(err){
+                            console.log(err);
+                            return;
+                        }
+                        //console.log(rows);
+                        var pairsArray=new Array();
+                        for(var rowIndex=0;rowIndex<rows.length;rowIndex++)
+                            pairsArray.push([rows[rowIndex]["ts"],rows[rowIndex]["value"]]);
+                        signalsWithValues.push({signalId:wsignalValuesTablesInfos[index].signalId, signalName:wsignalValuesTablesInfos[index].signalName,signalValues:pairsArray});
+                        if(index==wsignalValuesTablesInfos.length-1){
+                            callbackFunction(err,signalsWithValues);
+                        }
+                        localCallbackFunction();
+                    })
+                });
+
+                //var query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE UNIX_TIMESTAMP(ts) > "+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts ASC";
+
             }.bind (null, wSignalTableId, signalsWithValues));
         }
 
@@ -704,18 +726,43 @@ function getButton(dashboarduuid, name, callbackFunction)
 	});
 }
 
+function setButtonValue(buttonId, buttonValue, callbackFunction){
+    buttonId=mysql.escape(buttonId);
+    buttonValue=mysql.escape(buttonValue);
+    console.log(buttonValue)
+    var query="UPDATE "+buttonTable+" SET value="+buttonValue+" WHERE id="+buttonId;
+    connection.query(query, function(err, result){
+        callbackFunction(err, result);
+    });
+}
+
+function setSensorDescription(graphId,graphDescription, callbackFunction){
+    graphId=mysql.escape(graphId);
+    graphDescription=mysql.escape(graphDescription);
+    var query="UPDATE "+graphTable+" SET description="+graphDescription+" WHERE id="+graphId;
+    connection.query(query,function(err,result){
+        if(err)
+            console.log(err);
+        callbackFunction(err,result);
+    });
+}
 
 exports.addGraph=addGraph;
 exports.addSignal = addSignal;
+exports.addButton = addButton;
 
 exports.getAllDashboards = getAllDashboards;
 exports.getDashboard = getDashboard;
 exports.getDashboardsGraphsWithSignals=getDashboardsGraphsWithSignals;
 exports.getDashboardButtons = getDashboardButtons;
 exports.getSignalsValues=getSignalsValues;
+
+exports.setButtonValue=setButtonValue;
+exports.setSensorDescription=setSensorDescription;
+
+exports.removeGraph=removeGraph;
 /*exports.addSignal = addSignal;
 
-exports.addButton = addButton;
 exports.getDashboardButtons = getDashboardButtons;
 exports.getButtonValue = getButtonValue;
 exports.getDashboard = getDashboard;

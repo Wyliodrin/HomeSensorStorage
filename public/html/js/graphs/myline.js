@@ -109,7 +109,9 @@ MyLineWidget.prototype.addValueToSignal = function (name, value, ts, text)
 {
 	// console.log (ts);
 	var n = this.signalNr (name);
-	if (n >= 0) if (!this.signals[n].ts || this.signals[n].ts < ts) this.signals[n].ts = ts;
+	if (n >= 0)
+        if (!this.signals[n].ts || this.signals[n].ts < ts)
+            this.signals[n].ts = ts;
 	if (this.chart)
 	{
 		// console.log (this.chart.series[ns].points.length);
@@ -121,6 +123,8 @@ MyLineWidget.prototype.addValueToSignal = function (name, value, ts, text)
 				this.mustUpdate = true;
 				var out = (this.parameters.maxPoints.value > 0 && series.points.length >= this.parameters.maxPoints.value);
 				series.addPoint ([ts*1000, value], false, out);
+                if(this.lastValueElement!=null)
+                    this.lastValueElement.html(value);
 				if (text) this.addDebugToSignal (name, text, ts);
 			}
 		}

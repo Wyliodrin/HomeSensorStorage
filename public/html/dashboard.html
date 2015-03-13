@@ -16,9 +16,11 @@
       <script src="/html/js/dictionary.js"></script>
       <script src="/html/js/graphs/widget.js"></script>
     <script src="/html/js/graphs/myline.js"></script>
-
       <script src="/html/js/graphs/step-line.js"></script>
       <script src="/html/js/graphs/spline-line.js"></script>
+      <script src="/html/js/graphs/stock-pointMarker.js"></script>
+      <script src="/html/js/graphs/speedometer.js"></script>
+      <script src="/html/js/graphs/image.js"></script>
 
 
     <script type="text/javascript" src="/html/dashboard_script.js"></script>
@@ -213,7 +215,7 @@
             <option value="stepline">Stepline</option>
             <option value="point">Point maker</option>
             <option value="speedometer">Speedometer</option>
-            <option value="thermometer">Thermometer</option>
+            <option value="custom">Custom</option>
             <!--<option value="plineline">Plineline</option>
             <option value="point marker">Point marker</option>
             <option value="thermometer">thermometer</option>
@@ -237,6 +239,43 @@
   <a class="close-reveal-modal">&#215;</a>
 </div>
 
+<div id="EditSensorModal" class="reveal-modal large edit_sensor_description" data-reveal="" style="visibility: hidden; display: block; top: 100px; opacity: 1;">
+    <h2>Add new sensor</h2>
+    <form>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Sensor name
+                    <p id="edit_sensor_name"></p>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Signal name
+                    <p id="edit_signal_name"></p>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Sensor description
+                    <textarea id="edit_sensor_description"></textarea>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-6 medium-6 small-6 columns text-right">
+                <a href="#" class="button success large radius" id="ok_edit_sensor">Ok</a>
+            </div>
+            <div class="large-6 medium-6 small-6 columns text-left">
+                <a href="#" class="button alert large radius" id="cancel_edit_sensor">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <input type="hidden" id="edit_sensor_graph_id"/>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
 
 
 
@@ -290,7 +329,7 @@
 
       <div class="row">
         <div class="small-12 medium-12 columns">
-          <div class="range-slider slider_options" data-slider data-options="display_selector: #sliderOutput3, .selector;">
+          <div class="range-slider slider_options" data-slider data-options="display_selector: #sliderOutput3">
             <span class="range-slider-handle" role="slider" tabindex="0"></span>
             <span class="range-slider-active-segment"></span>
             <!--<input type="hidden"/>-->
@@ -320,8 +359,7 @@
             <div class="large-4 medium-4 small-4 columns text-right">
           <a href="#" data-options="align:bottom" data-dropdown="drop" class="d-settings"><i class="fi-widget size-18 blk"></i></a>
 <ul id="drop" class="f-dropdown text-left" data-dropdown-content>
-  <li><a href="#">Rename</a></li>
-            <li><a href="#">Edit</a></li>
+            <li><a href="#" class="edit_sensor_description_button">Edit</a></li>
             <li><a href="#" class="delete_chart_button">Delete</a></li>
 </ul>
         </div>

@@ -66,9 +66,13 @@ function createSignals()
 		{
 			if(rows.length == 0)
 			{
-				var query = "CREATE  TABLE "+signalTable+" (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(45) NULL, "+
-				"dashboarduuid VARCHAR(150) NOT NULL ,PRIMARY KEY (id), CONSTRAINT uc_name_dash UNIQUE (name, dashboarduuid),"+
-				"CONSTRAINT c FOREIGN KEY(dashboarduuid) REFERENCES "+dashboardName+"(uuid) ON UPDATE CASCADE ON DELETE CASCADE);";
+				var query = "CREATE  TABLE "+signalTable+" " +
+                    "(id INT NOT NULL AUTO_INCREMENT, " +
+                    "name VARCHAR(45) NULL, "+
+				    "dashboarduuid VARCHAR(150) NOT NULL ," +
+                    "PRIMARY KEY (id), " +
+                    "CONSTRAINT uc_name_dash UNIQUE (name, dashboarduuid),"+
+				    "CONSTRAINT c FOREIGN KEY(dashboarduuid) REFERENCES "+dashboardName+"(uuid) ON UPDATE CASCADE ON DELETE CASCADE);";
 				connection.query(query,function(err,rows){
 					if(err)
 						console.log('cannot create table '+err);

@@ -24,6 +24,13 @@ function Widget ()
     this.data = [10,4,17];
 
     this.mustUpdate = false;
+
+    //mod victor 13.03.2015
+    this.lastValueElement=null;
+}
+
+Widget.prototype.setLatestValueElement=function(latestValueElement){
+    this.lastValueElement=latestValueElement;
 }
 
 Widget.id = 'widget';
