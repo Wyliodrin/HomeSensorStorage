@@ -762,6 +762,8 @@ exports.getDashboardsGraphsWithSignals=getDashboardsGraphsWithSignals;
 exports.getDashboardButtons = getDashboardButtons;
 exports.getSignalsValues=getSignalsValues;
 
+exports.getButton = getButton;
+
 exports.setButtonValue=setButtonValue;
 exports.setSensorDescription=setSensorDescription;
 
@@ -769,6 +771,8 @@ exports.renameDashboard= renameDashboard;
 
 exports.removeGraph=removeGraph;
 exports.deleteDashboard = deleteDashboard;
+
+exports.addSignalValue = addSignalValue;
 /*exports.addSignal = addSignal;
 
 exports.getDashboardButtons = getDashboardButtons;

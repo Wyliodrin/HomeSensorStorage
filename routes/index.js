@@ -335,7 +335,6 @@ module.exports=function(app)
     app.get('/login',loadLogin);
     app.post("/login",login);
 
-    app.put("/add_signal",addSignal);
     app.post("/add_signal", addSignal);
 
     app.post("/add_dashboard", addDashboard);
@@ -345,6 +344,11 @@ module.exports=function(app)
     app.get("/dashboards", loadDashboards);
 
     app.post("/add_graph_and_signal",addGraphAndSignal);
+
+    app.post("/signal/get_button", getButton);
+    app.put("/signal/get_button", getButton);
+    app.post("/signal/add_signal_value", addSignalValue);
+    app.put("/signal/add_signal_value", addSignalValue);
 
     app.post("/get_dashboard", getDashboard);
     app.post("/get_dashboards", getDasboards);
