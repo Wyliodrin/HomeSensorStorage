@@ -295,7 +295,7 @@ function setSensorDescription(req,res){
 
 module.exports=function(app)
 {
-	/*app.use(function(req, res, next) {
+	app.use(function(req, res, next) {
 		var sess = req.session;
 		var signalPrefix = "/signal";
 		if((req.url === '/login')||(req.url.indexOf(signalPrefix) == 0))
@@ -307,7 +307,7 @@ module.exports=function(app)
 		else
 			res.redirect('/login');	  
 	});
-	app.get('/login',loadLogin);*/
+	//app.get('/login',loadLogin);
 	/*app.post("/add_button",addButton);
 	app.post("/add_dashboard", addDashboard);
 	//app.post("/add_signal", addSignal);
