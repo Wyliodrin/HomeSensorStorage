@@ -331,6 +331,7 @@ module.exports=function(app)
 
     app.post("/get_signals_values",getSignalsValues);*/
 
+    app.get('/login',loadLogin);
     app.post("/login",login);
 
     app.put("/add_signal",addSignal);app.post("/add_signal", addSignal);
