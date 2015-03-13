@@ -147,6 +147,7 @@ function addGraphAndSignal(req,res){
 
 function addSignal(req, res)
 {
+    console.log(JSON.stringify(req));
 	var body = req.body;
 	database.addSignal(body.name, body.dashboarduuid, body.graphid, function(err){
 		if(!err)
@@ -334,7 +335,8 @@ module.exports=function(app)
     app.get('/login',loadLogin);
     app.post("/login",login);
 
-    app.put("/add_signal",addSignal);app.post("/add_signal", addSignal);
+    app.put("/add_signal",addSignal);
+    app.post("/add_signal", addSignal);
 
     app.post("/add_dashboard", addDashboard);
     app.post("/add_button",addButton);

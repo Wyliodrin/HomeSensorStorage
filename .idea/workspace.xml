@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eeb905fb-4a8f-4e65-a81f-16fe267660ab" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/dashboard_script.js" afterPath="$PROJECT_DIR$/public/html/dashboard_script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database.js" afterPath="$PROJECT_DIR$/database.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/graphs/image.js" afterPath="$PROJECT_DIR$/public/html/js/graphs/image.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/js/graphs/widget.js" afterPath="$PROJECT_DIR$/public/html/js/graphs/widget.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
     </list>
     <ignored path="HomeSensorStorage.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -100,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.607142" vertical-offset="4140" max-vertical-offset="6256">
-              <caret line="261" column="24" selection-start-line="261" selection-start-column="13" selection-end-line="261" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.37107623" vertical-offset="2202" max-vertical-offset="6290">
+              <caret line="149" column="37" selection-start-line="149" selection-start-column="37" selection-end-line="149" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -120,11 +117,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="database.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="database.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3139932" vertical-offset="7357" max-vertical-offset="13634">
-              <caret line="449" column="37" selection-start-line="448" selection-start-column="8" selection-end-line="449" selection-end-column="37" />
+            <state vertical-scroll-proportion="-16.535715" vertical-offset="7357" max-vertical-offset="13634">
+              <caret line="460" column="0" selection-start-line="460" selection-start-column="0" selection-end-line="460" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -155,11 +152,11 @@
         <option value="$PROJECT_DIR$/public/html/js/graphs/myline.js" />
         <option value="$PROJECT_DIR$/public/html/dashboard.html" />
         <option value="$PROJECT_DIR$/settings.json" />
-        <option value="$PROJECT_DIR$/routes/index.js" />
         <option value="$PROJECT_DIR$/public/html/js/graphs/image.js" />
         <option value="$PROJECT_DIR$/public/html/js/graphs/widget.js" />
         <option value="$PROJECT_DIR$/public/html/dashboard_script.js" />
         <option value="$PROJECT_DIR$/database.js" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
       </list>
     </option>
   </component>
@@ -798,6 +795,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.535715" vertical-offset="7357" max-vertical-offset="13634">
+          <caret line="460" column="0" selection-start-line="460" selection-start-column="0" selection-end-line="460" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.285714" vertical-offset="3226" max-vertical-offset="6970">
@@ -808,16 +813,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.607142" vertical-offset="4140" max-vertical-offset="6256">
-          <caret line="261" column="24" selection-start-line="261" selection-start-column="13" selection-end-line="261" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3139932" vertical-offset="7357" max-vertical-offset="13634">
-          <caret line="449" column="37" selection-start-line="448" selection-start-column="8" selection-end-line="449" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.37107623" vertical-offset="2202" max-vertical-offset="6290">
+          <caret line="149" column="37" selection-start-line="149" selection-start-column="37" selection-end-line="149" selection-end-column="37" />
           <folding />
         </state>
       </provider>
