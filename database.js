@@ -281,7 +281,17 @@ function removeGraph(graphId, callbackFunction){
             console.log("Could not delete graph " + dashboardTable + ' ' + err);
             return;
         }
-           /* clearSignalValueTables(function(err){
+        query="SELECT * FROM "+correspondenceTable+" WEHRE graphid"+graphId;
+        /*connection.query(query,function(err,rows){
+            if(err){
+                console.log(err);
+                return;
+            }
+            if(rows.length==){
+
+            }
+        })*/
+            /*clearSignalValueTables(function(err){
                 callbackFunction(err);
             });*/
         console.log("delete");

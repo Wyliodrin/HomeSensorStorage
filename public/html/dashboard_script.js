@@ -324,11 +324,12 @@ function addGraphAndSignal(graph) {
     //@ to do : rename the delete button to delete_graph_button
     mySensor.find(".delete_chart_button").click({graphId: graph.graphId}, function (evt) {
         var graphId = evt.data.graphId;
-        $.post("/remove_graph", {graphId: graphId}, function (response, textStatus) {
-            if (response.status == "done") {
-                mySensor.remove();
-            }
-        });
+        if(confirm("Are you sure?"))
+            $.post("/remove_graph", {graphId: graphId}, function (response, textStatus) {
+                if (response.status == "done") {
+                    mySensor.remove();
+                }
+            });
     });
 
     if (graph.graphType == "line")
