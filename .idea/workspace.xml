@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eeb905fb-4a8f-4e65-a81f-16fe267660ab" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/html/dashboard_script.js" afterPath="$PROJECT_DIR$/public/html/dashboard_script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database.js" afterPath="$PROJECT_DIR$/database.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="HomeSensorStorage.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +32,8 @@
       <file leaf-file-name="dashboard_script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.285714" vertical-offset="3226" max-vertical-offset="6970">
-              <caret line="210" column="19" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
+            <state vertical-scroll-proportion="-14.714286" vertical-offset="1577" max-vertical-offset="6970">
+              <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -42,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/public/html/js/graphs/image.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
-              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="1" />
+              <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -108,21 +109,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myline.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="myline.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/html/js/graphs/myline.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.607142" vertical-offset="1522" max-vertical-offset="7021">
-              <caret line="107" column="31" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.5997758" vertical-offset="1522" max-vertical-offset="7021">
+              <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="database.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="database.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41979522" vertical-offset="12789" max-vertical-offset="13702">
-              <caret line="774" column="40" selection-start-line="774" selection-start-column="40" selection-end-line="774" selection-end-column="40" />
+            <state vertical-scroll-proportion="-8.035714" vertical-offset="7629" max-vertical-offset="13685">
+              <caret line="462" column="41" selection-start-line="462" selection-start-column="41" selection-end-line="462" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -155,8 +156,8 @@
         <option value="$PROJECT_DIR$/settings.json" />
         <option value="$PROJECT_DIR$/public/html/js/graphs/image.js" />
         <option value="$PROJECT_DIR$/public/html/js/graphs/widget.js" />
-        <option value="$PROJECT_DIR$/public/html/dashboard_script.js" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/public/html/dashboard_script.js" />
         <option value="$PROJECT_DIR$/database.js" />
       </list>
     </option>
@@ -772,10 +773,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/html/js/graphs/myline.js">
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.607142" vertical-offset="1522" max-vertical-offset="7021">
-          <caret line="107" column="31" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2754" max-vertical-offset="6358">
+          <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.714286" vertical-offset="1577" max-vertical-offset="6970">
+          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -791,31 +800,23 @@
     <entry file="file://$PROJECT_DIR$/public/html/js/graphs/image.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="29" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.285714" vertical-offset="3226" max-vertical-offset="6970">
-          <caret line="210" column="19" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2754" max-vertical-offset="6358">
-          <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="27" />
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/database.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41979522" vertical-offset="12789" max-vertical-offset="13702">
-          <caret line="774" column="40" selection-start-line="774" selection-start-column="40" selection-end-line="774" selection-end-column="40" />
+        <state vertical-scroll-proportion="-8.035714" vertical-offset="7629" max-vertical-offset="13685">
+          <caret line="462" column="41" selection-start-line="462" selection-start-column="41" selection-end-line="462" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/html/js/graphs/myline.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5997758" vertical-offset="1522" max-vertical-offset="7021">
+          <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
           <folding />
         </state>
       </provider>

@@ -104,7 +104,7 @@ $(document).ready(function () {
             },
             function (response, textStatus) {
                 if (response.status != "done") {
-                    alert(textStatus);
+                    alert(response);
                     return;
                 }
 

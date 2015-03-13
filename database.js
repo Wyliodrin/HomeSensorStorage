@@ -429,7 +429,6 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
 }
 
 function getSignalsValues(signalsInfos,callbackFunction){
-
     var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE '"+signalTablePrefix +"%'";// WHERE 'wsignalvalue%'
     connection.query(query,function(err,rows){
         if(err){
@@ -465,7 +464,7 @@ function getSignalsValues(signalsInfos,callbackFunction){
                         return;
                     }
 
-                    if(rows[0]["type"]=="speedometer") {
+                    if(rows[0]["type"]=="speedometer" || rows[0]["type"]=="custom") {
                         //console.log(wsignalValuesTablesInfos[index].signalDatetime);
                         query = "SELECT MAX(UNIX_TIMESTAMP(ts)) as ts,value as value FROM " + signalTablePrefix + wsignalValuesTablesInfos[index].signalId;
                     }
