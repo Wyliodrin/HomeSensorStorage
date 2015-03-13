@@ -33,7 +33,7 @@
         <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="5876" max-vertical-offset="6783">
-              <caret line="377" column="18" selection-start-line="377" selection-start-column="18" selection-end-line="377" selection-end-column="18" />
+              <caret line="375" column="40" selection-start-line="375" selection-start-column="40" selection-end-line="375" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -92,8 +92,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-23.357143" vertical-offset="5109" max-vertical-offset="6222">
-              <caret line="339" column="38" selection-start-line="339" selection-start-column="38" selection-end-line="339" selection-end-column="38" />
+            <state vertical-scroll-proportion="-12.428572" vertical-offset="553" max-vertical-offset="6256">
+              <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -102,8 +102,8 @@
       <file leaf-file-name="database.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18771331" vertical-offset="12619" max-vertical-offset="13515">
-              <caret line="752" column="36" selection-start-line="752" selection-start-column="36" selection-end-line="752" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.40045506" vertical-offset="12687" max-vertical-offset="13583">
+              <caret line="767" column="42" selection-start-line="767" selection-start-column="42" selection-end-line="767" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -799,24 +799,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/html/dashboard_script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5043" max-vertical-offset="6783">
-          <caret line="377" column="18" selection-start-line="377" selection-start-column="18" selection-end-line="377" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="5876" max-vertical-offset="6783">
+          <caret line="375" column="40" selection-start-line="375" selection-start-column="40" selection-end-line="375" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-23.357143" vertical-offset="5109" max-vertical-offset="6222">
-          <caret line="339" column="38" selection-start-line="339" selection-start-column="38" selection-end-line="339" selection-end-column="38" />
+        <state vertical-scroll-proportion="-12.428572" vertical-offset="553" max-vertical-offset="6256">
+          <caret line="53" column="21" selection-start-line="53" selection-start-column="21" selection-end-line="53" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/database.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18771331" vertical-offset="12619" max-vertical-offset="13515">
-          <caret line="752" column="36" selection-start-line="752" selection-start-column="36" selection-end-line="752" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.40045506" vertical-offset="12687" max-vertical-offset="13583">
+          <caret line="767" column="42" selection-start-line="767" selection-start-column="42" selection-end-line="767" selection-end-column="42" />
           <folding />
         </state>
       </provider>

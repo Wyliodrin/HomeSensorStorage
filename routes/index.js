@@ -354,6 +354,8 @@ module.exports=function(app)
     app.post("/set_button_value",setButtonValue);
     app.post("/set_sensor_description",setSensorDescription);
 
+    app.post("/rename_dashboard", renameDashboard);
+
     app.post("/remove_graph", removeGraph);
 
     app.post("/delete_dashboard", deleteDashboard);
