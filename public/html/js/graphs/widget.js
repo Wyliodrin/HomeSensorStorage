@@ -37,6 +37,11 @@ Widget.prototype.setLatestValueElement=function(latestValueElement){
     this.lastValueElement=latestValueElement;
 }
 
+Widget.prototype.numberOfPoints = function ()
+{
+    return 1;
+}
+
 Widget.id = 'widget';
 
 //[{"name": "signal", "value": {"component": value,}, "timestamp": 100}]

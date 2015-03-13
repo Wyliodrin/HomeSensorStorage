@@ -21,7 +21,7 @@ function SpeedometerWidget()
 		{
 			type:'double',
 			text:'Low value',
-			value: 50
+			value: 500
 		},
 
 		midColor:
@@ -35,7 +35,7 @@ function SpeedometerWidget()
 		{
 			type:'double',
 			text:'Mid color',
-			value: 90
+			value: 700
 		},
 
 		highColor:
@@ -54,7 +54,7 @@ function SpeedometerWidget()
 		maximum_value:
 		{
 			type: 'number',
-			value: 100,
+			value: 1023,
 			text: 'Maximum value'
 		},
 		
@@ -86,6 +86,8 @@ SpeedometerWidget.prototype.addValueToSignalNr = function (ns, value, ts)
 	if (this.chart)
 	{
 		this.chart.series[0].points[0].update (value, false);
+        if(this.lastValueElement!=null)
+            this.lastValueElement.html(value);
 		this.mustUpdate = true;
 	}
 }

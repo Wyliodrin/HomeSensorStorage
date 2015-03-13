@@ -181,6 +181,7 @@ function getDashboardSignals(req,res){
 function addSignalValue(req, res)
 {
 	var body = req.body;
+    console.log (req.body);
 	database.addSignalValue(body.timestamp, body.value, body.name, body.dashboarduuid, function(err){
 		if(!err)
 			res.status(200).send({status:"done"});

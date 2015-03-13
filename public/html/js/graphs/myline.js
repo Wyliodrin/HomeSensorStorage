@@ -34,7 +34,7 @@ function MyLineWidget()
 		{
 			type: 'boolean',
 			text: 'Fix axes values',
-			value: false
+			value: true
 		},
 
 		minAxisValue:
@@ -65,7 +65,7 @@ function MyLineWidget()
 		{
 			type:'number',
 			text: 'Maximum points to show (0 means show all)',
-			value: 10
+			value: 100
 
 		},
 
@@ -103,6 +103,11 @@ MyLineWidget.prototype.constructor = MyLineWidget;
 MyLineWidget.prototype.resize = function(nr)
 {
 
+}
+
+MyLineWidget.prototype.numberOfPoints = function ()
+{
+	return this.parameters.maxPoints.value;
 }
 
 MyLineWidget.prototype.addValueToSignal = function (name, value, ts, text)
