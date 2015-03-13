@@ -2,7 +2,7 @@
 	"host":"localhost",
 	"username":"root",
 	"password":"",
-	"prefix":"w",
+	"prefix":"w_",
 	"database":"signals",
 	"loginPassword":"123"
 }

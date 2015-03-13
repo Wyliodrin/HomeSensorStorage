@@ -17,7 +17,7 @@ var dashboardTable = config.prefix+"dashboard";
 var graphTable = config.prefix+"graph";
 var signalTable = config.prefix+'signal';
 var correspondenceTable = config.prefix+'correspondence';
-var signalTablePrefix = config.prefix+'signalvalue';
+var signalTablePrefix = config.prefix+'signalvalue_';
 var buttonTable = config.prefix+'button';
 
 connection.connect();
