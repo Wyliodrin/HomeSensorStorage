@@ -465,9 +465,9 @@ function getSignalsValues(signalsInfos,callbackFunction){
                         return;
                     }
 
-                    if(rows[0]["type"]=="speedometer") {
+                    if(rows[0]["type"]=="speedometer" || rows[0]["type"] == "custom") {
                         //console.log(wsignalValuesTablesInfos[index].signalDatetime);
-                        query = "SELECT MAX(UNIX_TIMESTAMP(ts)) as ts,value as value FROM " + signalTablePrefix + wsignalValuesTablesInfos[index].signalId;
+                        query = "SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM " + signalTablePrefix + wsignalValuesTablesInfos[index].signalId+" ORDER BY ts DESC LIMIT 0,1";
                     }
                     else
                         query="SELECT UNIX_TIMESTAMP(ts) as ts,value as value FROM "+signalTablePrefix+wsignalValuesTablesInfos[index].signalId+" WHERE UNIX_TIMESTAMP(ts) > "+wsignalValuesTablesInfos[index].signalDatetime+" ORDER BY ts ASC";

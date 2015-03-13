@@ -232,7 +232,8 @@ function refresh(){
                 for (var signalIndex = 0; signalIndex < response.value.length; signalIndex++)
                 {
                     if (globalGraphs[graphIndex].signalNr (response.value[signalIndex].signalName)>=0)
-                    { for (var valueIndex = 0; valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
+                        console.log (globalGraphs[graphIndex].numberOfPoints());
+                    { for (var valueIndex = Math.max (0, response.value[signalIndex].signalValues.length-globalGraphs[graphIndex].numberOfPoints()); valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
                             globalGraphs[graphIndex].addValueToSignal (response.value[signalIndex].signalName, response.value[signalIndex].signalValues[valueIndex][1], response.value[signalIndex].signalValues[valueIndex][0]);
                         globalGraphs[graphIndex].update ();
                     }
@@ -394,7 +395,8 @@ function addGraphAndSignal(graph) {
     else if(graph.graphType=="custom"){
         var button=new MyImage();
         button.name=graph.graphName;
-        button.description=graph.graphDescription;
+        button.setDescription(graph.graphDescription);
+        // alert (button.description);
         button.setLatestValueElement(mySensor.find(".latest_value"));
         button.addSignal ({id: graph.graphSignals[0].signalId, name:graph.graphSignals[0].signalName, color:"#000000", ts: 0});
         button.draw(mySensor.find ('.chart'));
