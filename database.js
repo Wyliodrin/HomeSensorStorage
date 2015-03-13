@@ -389,8 +389,6 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
             return;
         }
 
-        console.log(rows);
-
         var graphs=new Array();
         //console.log(rows.length);
         for(var index=0;index<rows.length;index++) {
@@ -432,7 +430,7 @@ function getDashboardsGraphsWithSignals(dashboardId, callbackFunction){
 
 function getSignalsValues(signalsInfos,callbackFunction){
 
-    var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'wsignalvalue%'"// AS tables";// WHERE 'wsignalvalue%'
+    var query="SELECT TABLE_NAME AS name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE '"+signalTablePrefix +"%'";// WHERE 'wsignalvalue%'
     connection.query(query,function(err,rows){
         if(err){
             console.log(err);
@@ -441,11 +439,15 @@ function getSignalsValues(signalsInfos,callbackFunction){
 
         var wsignalValuesTablesInfos=new Array();
         for(var rowIndex=0;rowIndex<rows.length;rowIndex++) {
-            var signalTableId = rows[rowIndex].name.substr("wsignalvalue".length, rows[rowIndex].name.length);
+            var signalTableId = rows[rowIndex].name.substr(signalTablePrefix.length, rows[rowIndex].name.length);
             for (var signalInfoIndex = 0; signalInfoIndex < signalsInfos.length; signalInfoIndex++)
                 if (signalsInfos[signalInfoIndex].signalId == signalTableId)
                     wsignalValuesTablesInfos.push(signalsInfos[signalInfoIndex]);
         }
+
+        //console.log(wsignalValuesTablesInfos.length);
+        if(wsignalValuesTablesInfos.length==0)
+            callbackFunction(err,[]);
 
         var queryFunctions=new Array();
         var signalsWithValues=new Array();
@@ -456,6 +458,7 @@ function getSignalsValues(signalsInfos,callbackFunction){
                 "INNER JOIN "+correspondenceTable+" ON signals.id=signalid " +
                 "INNER JOIN " +graphTable+" graphs ON graphs.id=graphid "+
                 "WHERE signals.id="+wsignalValuesTablesInfos[index].signalId;
+
                 connection.query(query, function(err,rows){
                     if(err){
                         console.log(err);

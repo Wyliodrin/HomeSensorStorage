@@ -25,6 +25,7 @@ MyImage.prototype.draw=function(div,samples){
 }
 
 MyImage.prototype.setDescription=function(description){
+    this.description=description
    this.urls=description.split("\n").length;
 }
 

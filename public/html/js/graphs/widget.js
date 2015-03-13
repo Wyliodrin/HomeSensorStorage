@@ -29,6 +29,10 @@ function Widget ()
     this.lastValueElement=null;
 }
 
+Widget.prototype.setDescription=function(description){
+    this.description=description
+}
+
 Widget.prototype.setLatestValueElement=function(latestValueElement){
     this.lastValueElement=latestValueElement;
 }

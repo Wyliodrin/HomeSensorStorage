@@ -45,18 +45,18 @@ $(document).ready(function () {
         $(".edit_sensor_description").foundation("reveal","close");
         var graphId=$("#edit_sensor_graph_id").val();
         var graphName=$("#edit_sensor_name").html();
-        var description=$("#edit_sensor_description").val();
+        var graphDescription=$("#edit_sensor_description").val();
 
         for(var index=0;index<globalGraphs.length;index++)
             if(globalGraphs[index].name==graphName)
-                globalGraphs.setDescription(description);
+                globalGraphs[index].setDescription(graphDescription);
 
-        /*$.post("/set_sensor_description",
-            {graphId:graphId,sensorDescription:description},
+        $.post("/set_sensor_description",
+            {graphId:graphId,sensorDescription:graphDescription},
             function(response, textStatus){
-
+                //alert(JSON.stringify(response));
             }
-        );*/
+        );
     });
 
     $("#cancel_edit_sensor").click(function(){
@@ -232,8 +232,7 @@ function refresh(){
                 for (var signalIndex = 0; signalIndex < response.value.length; signalIndex++)
                 {
                     if (globalGraphs[graphIndex].signalNr (response.value[signalIndex].signalName)>=0)
-                    {
-                        for (var valueIndex = 0; valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
+                    { for (var valueIndex = 0; valueIndex < response.value[signalIndex].signalValues.length; valueIndex++)
                             globalGraphs[graphIndex].addValueToSignal (response.value[signalIndex].signalName, response.value[signalIndex].signalValues[valueIndex][1], response.value[signalIndex].signalValues[valueIndex][0]);
                         globalGraphs[graphIndex].update ();
                     }
@@ -311,10 +310,14 @@ function addGraphAndSignal(graph) {
         var signalName=evt.data.signalName;
         var sensorDescription=evt.data.sensorDescription;
         $(".edit_sensor_description").foundation("reveal","open");
+        $("#edit_sensor_graph_id").val(graphId);
         $("#edit_sensor_name").html(graphName);
         $("#edit_signal_name").html(signalName);
-        $("#edit_sensor_description").val(sensorDescription);
-        $("#edit_sensor_graph_id").val(graphId);
+
+        for(var index=0;index<globalGraphs.length;index++)
+            if(globalGraphs[index].name==graphName)
+                $("#edit_sensor_description").val(globalGraphs[index].description);
+
     });
     //add onclick action on the sensor
     //@ to do : rename the delete button to delete_graph_button
