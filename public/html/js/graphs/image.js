@@ -5,6 +5,7 @@ function MyImage(){
     this.signals = [];
 
     this.value = 0;
+    this.urls=[];
 }
 
 MyImage.id = 'image';
@@ -16,16 +17,15 @@ MyImage.prototype.draw=function(div,samples){
     div.css("text-align","center");
     var image=document.createElement("img");
     $(image).css("max-height",320);
-    if(this.value==0){
+    if(this.value>=this.urls.length)
         image.src="http://www.joomlaworks.net/images/demos/galleries/abstract/7.jpg";
-    }
-    else if(this.value==1)
-        image.src="http://www.online-image-editor.com//styles/2014/images/example_image.png";
-    else if(this.value==2)
-        image.src="http://www.jpl.nasa.gov/spaceimages/images/mediumsize/PIA17011_ip.jpg";
-    else if(this.value==3)
-        image.src="http://www.wonderplugin.com/wp-content/plugins/wonderplugin-lightbox/images/demo-image1.jpg";
+    else
+        image.src=this.urls[this.value];
     div.html(image);
+}
+
+MyImage.prototype.setDescription=function(description){
+   this.urls=description.split("\n").length;
 }
 
 MyImage.prototype.setLatestValueElement=function(latestValueElement){

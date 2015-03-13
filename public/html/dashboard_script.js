@@ -44,13 +44,19 @@ $(document).ready(function () {
     $("#ok_edit_sensor").click(function(){
         $(".edit_sensor_description").foundation("reveal","close");
         var graphId=$("#edit_sensor_graph_id").val();
+        var graphName=$("#edit_sensor_name").html();
         var description=$("#edit_sensor_description").val();
-        $.post("/set_sensor_description",
+
+        for(var index=0;index<globalGraphs.length;index++)
+            if(globalGraphs[index].name==graphName)
+                globalGraphs.setDescription(description);
+
+        /*$.post("/set_sensor_description",
             {graphId:graphId,sensorDescription:description},
             function(response, textStatus){
 
             }
-        );
+        );*/
     });
 
     $("#cancel_edit_sensor").click(function(){
@@ -296,6 +302,8 @@ function addGraphAndSignal(graph) {
     //append the sensor html to the sensors area
     $("#sensor_area").append(mySensor);
 
+    mySensor.find(".d-settings").attr("data-dropdown","drop"+graph.graphId);
+    mySensor.find(".f-dropdown").attr("id","drop"+graph.graphId);
 
     mySensor.find(".edit_sensor_description_button").click({graphId:graph.graphId,graphName:graph.graphName,signalName:graph.graphSignals[0].signalName,sensorDescription:graph.graphDescription},function(evt){
         var graphId=evt.data.graphId;
